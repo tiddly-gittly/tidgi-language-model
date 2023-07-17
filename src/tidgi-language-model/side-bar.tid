@@ -1,0 +1,6 @@
+title: $:/plugins/linonetwo/tidgi-language-model/side-bar
+type: text/vnd.tiddlywiki
+tags: $:/tags/SideBar
+caption: TG AI
+
+<$tidgi-chat history="$:/state/plugins/linonetwo/tidgi-language-model/side-bar-history" scroll="yes" temperature="1" max_tokens="512" system_message="You known much on TiddlyWiki. You should answer in wikitext format." />
