@@ -261,6 +261,7 @@ class ChatGPTWidget extends Widget {
 
         chatButton.addEventListener('click', createChat);
         chatInput.addEventListener('keydown', (event) => {
+          if (event.isComposing) return;
           if (event.code === 'Enter' && !event.shiftKey) {
             event.preventDefault();
             createChat(event);
