@@ -122,7 +122,6 @@ class ChatGPTWidget extends Widget {
     }) as HTMLDivElement;
     nextSibling ? nextSibling.before(container) : parent.append(container);
     this.domNodes.push(container);
-    if (window?.observables?.languageModel?.runLanguageModel$ === undefined) return;
     this.chat(container, conversations);
   }
 
@@ -273,6 +272,9 @@ class ChatGPTWidget extends Widget {
           };
           const { conversation, answerBox, printError } = renderChatingConversation(zh, userInputText, this.cancelButtonText, conversations, onCancel, attachment);
           conversations.prepend(conversation);
+
+          // if no tidgi service, not actually calling api
+          if (window?.observables?.languageModel?.runLanguageModel$ === undefined) return;
 
           // 流式调用
           try {
