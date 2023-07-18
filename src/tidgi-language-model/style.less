@@ -21,13 +21,14 @@
 
   .chat-input {
     flex-grow: 1;
-    padding-left: 10px;
     font-size: 16px;
+    min-height: 3.5em;
+    padding: 1em 0.5em;
+    overflow: hidden;
+    resize: vertical;
   }
 
   .chat-button {
-    height: 45px;
-    width: 45px;
     font-size: 20px;
   }
 
@@ -52,6 +53,7 @@
   .chatgpt-conversation-message {
     padding: 10px 20px;
     position: relative;
+    min-height: 3.5em;
 
     .conversation-datetime {
       position: absolute;
@@ -70,6 +72,12 @@
     }
 
     .cancel-button {
+      position: absolute;
+      right: 0;
+      top: 5px;
+    }
+
+    .copy-button {
       position: absolute;
       right: 0;
       top: 5px;

@@ -21,6 +21,14 @@ class ChatGPTWidget extends Widget {
     )!,
   );
 
+  private readonly attachmentButtonText: string = $tw.wiki.renderText(
+    'text/html',
+    'text/vnd.tiddlywiki',
+    $tw.wiki.getTiddlerText(
+      '$:/core/images/import-button',
+    )!,
+  );
+
   private readonly editButtonText: string = $tw.wiki.renderText(
     'text/html',
     'text/vnd.tiddlywiki',
@@ -42,6 +50,14 @@ class ChatGPTWidget extends Widget {
     'text/vnd.tiddlywiki',
     $tw.wiki.getTiddlerText(
       '$:/core/images/cancel-button',
+    )!,
+  );
+
+  private readonly copyButtonText: string = $tw.wiki.renderText(
+    'text/html',
+    'text/vnd.tiddlywiki',
+    $tw.wiki.getTiddlerText(
+      '$:/core/images/copy-clipboard',
     )!,
   );
 
@@ -123,17 +139,21 @@ class ChatGPTWidget extends Widget {
       const zh = isChinese();
       const { getHistory, setHistory } = historyManager(this.historyTiddler);
       // 聊天机制
-      let fillChatInput: ((user: string) => void) | undefined;
+      let fillChatInput: ((user: string, attachment?: string) => void) | undefined;
       if (!this.readonly) {
-        const chatInput = $tw.utils.domMaker('input', {
+        const chatInput = $tw.utils.domMaker('textarea', {
           class: 'chat-input',
           attributes: {
             type: 'text',
             placeholder: zh ? '输入一个问题...' : 'Ask a question...',
             autofocus: true,
+            rows: 1,
           },
         });
-        fillChatInput = (user: string) => (chatInput.value = user);
+        fillChatInput = (user: string, attachment?: string) => {
+          chatInput.value = user;
+          attachmentInput.value = attachment ?? '';
+        };
         const chatButton = $tw.utils.domMaker('button', {
           class: 'chat-button',
           innerHTML: this.chatButtonText,
@@ -141,13 +161,33 @@ class ChatGPTWidget extends Widget {
             title: zh ? '进行对话' : 'Chat',
           },
         });
+        const attachmentButton = $tw.utils.domMaker('button', {
+          class: 'attachment-button',
+          innerHTML: this.attachmentButtonText,
+          attributes: {
+            title: zh ? '附加条目' : 'Attach Tiddler',
+          },
+        });
+        const attachmentInput = $tw.utils.domMaker('input', {
+          class: 'attachment-input',
+          attributes: {
+            type: 'text',
+            placeholder: zh ? '填入条目标题或筛选器表达式' : 'Fill in Tiddler title or filter expression',
+            autofocus: false,
+            hidden: true,
+          },
+        });
         container.prepend(
           $tw.utils.domMaker('div', {
             class: 'chat-box',
-            children: [chatInput, chatButton],
+            children: [attachmentButton, chatInput, chatButton],
           }),
         );
 
+        const toggleAttachmentInput = () => {
+          attachmentInput.hidden = !attachmentInput.hidden;
+        };
+        container.prepend(attachmentInput);
         // 会话接口
         let apiLock = false;
         const createChat = (event: UIEvent) => {
@@ -159,6 +199,8 @@ class ChatGPTWidget extends Widget {
           if (!userInputText) {
             return;
           }
+          // eslint-disable-next-line unicorn/prefer-string-replace-all
+          const attachment = attachmentInput.hidden ? '' : $tw.wiki.filterTiddlers(attachmentInput.value).map(title => $tw.wiki.getTiddlerText(title)).join('\n\n');
           chatInput.value = '';
           apiLock = true;
           chatButton.disabled = true;
@@ -175,6 +217,8 @@ class ChatGPTWidget extends Widget {
               created,
               assistant: accumulatedAnswer,
               user: userInputText,
+              // only record the filter string, instead of final result, to reduce history size
+              attachment: attachmentInput.hidden ? '' : attachmentInput.value,
             };
             setHistory([...getHistory(), newHistory]);
             conversation.remove();
@@ -183,6 +227,7 @@ class ChatGPTWidget extends Widget {
               zh,
               this.editButtonText,
               this.deleteButtonText,
+              this.copyButtonText,
               fillChatInput,
               () => {
                 resultConversation.remove();
@@ -219,7 +264,7 @@ class ChatGPTWidget extends Widget {
             chatButton.disabled = false;
             conversation.remove();
           };
-          const { conversation, answerBox, printError } = renderChatingConversation(zh, userInputText, this.cancelButtonText, conversations, onCancel);
+          const { conversation, answerBox, printError } = renderChatingConversation(zh, userInputText, this.cancelButtonText, conversations, onCancel, attachment);
           conversations.prepend(conversation);
 
           // 流式调用
@@ -233,11 +278,13 @@ class ChatGPTWidget extends Widget {
 
             window.observables.languageModel.runLLama$({
               completionOptions: {
-                prompt: `${this.systemMessage}${userInputText}\nASSISTANT:\n`,
+                prompt: `CONTEXT:${attachment}\n${this.systemMessage}\nUSER:${userInputText}\nASSISTANT:\n`,
               },
               id,
             }).subscribe({
               next: (data) => {
+                // DEBUG: console data
+                console.log(`data`, data);
                 try {
                   if (data.id !== id) return;
                   accumulatedAnswer = `${accumulatedAnswer}${data.token ?? ''}`;
@@ -260,6 +307,7 @@ class ChatGPTWidget extends Widget {
         };
 
         chatButton.addEventListener('click', createChat);
+        attachmentButton.addEventListener('click', toggleAttachmentInput);
         chatInput.addEventListener('keydown', (event) => {
           if (event.isComposing) return;
           if (event.code === 'Enter' && !event.shiftKey) {
@@ -276,6 +324,7 @@ class ChatGPTWidget extends Widget {
           zh,
           this.editButtonText,
           this.deleteButtonText,
+          this.copyButtonText,
           fillChatInput,
           this.readonly
             ? undefined

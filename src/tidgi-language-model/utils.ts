@@ -2,6 +2,7 @@ export const CHAT_COMPLETION_URL = 'https://api.openai.com/v1/chat/completions';
 
 export interface ChatHistory {
   assistant: string;
+  attachment: string;
   created: number;
   id: string;
   user: string;
@@ -20,11 +21,12 @@ export interface ChatGPTOptions {
 export const isChinese = () => $tw.wiki.getTiddler('$:/language')!.fields.text.includes('zh');
 
 export const renderConversation = (
-  { id, assistant, user, created }: ChatHistory,
+  { id, assistant, user, created, attachment }: ChatHistory,
   zh: boolean,
   editButtonText: string,
   deleteButtonText: string,
-  onEdit?: (user: string) => void,
+  copyButtonText: string,
+  onEdit?: (user: string, attachment?: string) => void,
   onDelete?: () => void,
 ) => {
   let editButton: HTMLButtonElement | undefined;
@@ -37,7 +39,7 @@ export const renderConversation = (
       },
     });
     editButton.addEventListener('click', () => {
-      onEdit(user);
+      onEdit(user, attachment);
     });
   }
   let deleteButton: HTMLButtonElement | undefined;
@@ -53,6 +55,16 @@ export const renderConversation = (
       onDelete();
     });
   }
+  const copyButton = $tw.utils.domMaker('button', {
+    class: 'copy-button',
+    innerHTML: copyButtonText,
+    attributes: {
+      title: zh ? '复制原文' : 'Copy raw text',
+    },
+  });
+  copyButton.addEventListener('click', () => {
+    $tw.utils.copyToClipboard(assistant);
+  });
   return $tw.utils.domMaker('div', {
     class: 'chatgpt-conversation',
     attributes: {
@@ -61,11 +73,16 @@ export const renderConversation = (
     children: [
       $tw.utils.domMaker('div', {
         class: 'chatgpt-conversation-message chatgpt-conversation-assistant',
-        innerHTML: $tw.wiki.renderText(
-          'text/html',
-          'text/vnd.tiddlywiki',
-          assistant,
-        ),
+        children: [
+          $tw.utils.domMaker('p', {
+            innerHTML: $tw.wiki.renderText(
+              'text/html',
+              'text/vnd.tiddlywiki',
+              assistant,
+            ),
+          }),
+          copyButton,
+        ],
       }),
       $tw.utils.domMaker('div', {
         class: 'chatgpt-conversation-message chatgpt-conversation-user',
@@ -75,6 +92,7 @@ export const renderConversation = (
             text: new Date(created).toLocaleString(),
           }),
           $tw.utils.domMaker('p', { text: user }),
+          $tw.utils.domMaker('pre', { text: attachment }),
           ...((deleteButton === undefined) ? [] : [deleteButton]),
           ...((editButton === undefined) ? [] : [editButton]),
         ],
@@ -89,6 +107,7 @@ export const renderChatingConversation = (
   cancelButtonText: string,
   conversations: HTMLElement,
   onCancel?: (conversation: HTMLDivElement) => void,
+  attachment?: string,
 ) => {
   const answerBox = $tw.utils.domMaker('pre', {
     text: zh ? '思考中...' : 'Thinking...',
@@ -135,6 +154,7 @@ export const renderChatingConversation = (
             text: new Date().toLocaleString(),
           }),
           $tw.utils.domMaker('p', { text: user }),
+          $tw.utils.domMaker('pre', { text: attachment }),
         ],
       }),
     ],
