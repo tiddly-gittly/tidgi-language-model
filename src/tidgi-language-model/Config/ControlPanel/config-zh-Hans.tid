@@ -8,3 +8,8 @@ type: text/vnd.tiddlywiki
   <option value='rwkv.cpp'>rwkv.cpp</option>
 </$select>
 : 各运行器支持的模型见 [[https://llama-node.vercel.app/zh-Hans/docs/model]]
+; 默认使用的CPU核心数
+: <$edit-text tiddler='$:/plugins/linonetwo/tidgi-language-model/Config/cpu-count' tag='input' type='number' />
+: 请使用任务管理器查看你的电脑拥有的核心数。
+
+> 要注意有的电脑使用了 Hyper-Threading 或大小核等技术，有一个物理核心可能会被操作系统视为两个逻辑核心等等情况，此时核心数应该填写物理核心数，不然超过某个值后，填得越大反而越慢。

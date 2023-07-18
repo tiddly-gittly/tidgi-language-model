@@ -8,3 +8,8 @@ type: text/vnd.tiddlywiki
   <option value='rwkv.cpp'>rwkv.cpp</option>
 </$select>
 : For each runner's supported model, see [[https://llama-node.vercel.app/docs/model]]
+;The number of CPU cores used by default
+: <$edit-text tiddler='$:/plugins/linonetwo/tidgi-language-model/Config/cpu-count' tag='input' type='number' />
+: Please use Task Manager to see how many cores your computer has.
+
+> Please note that some computers use Hyper-Threading or Big-Small cores, and one physical core may be treated as two logical cores by the operating system, etc. In this case, you should fill in the number of physical cores, or the larger the number, the slower the CPU will be when it exceeds a certain value.
