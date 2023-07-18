@@ -1,0 +1,10 @@
+title: $:/plugins/linonetwo/tidgi-language-model/Config/zh-Hans
+type: text/vnd.tiddlywiki
+
+; 默认使用的语言模型运行器
+: <$select tiddler='$:/plugins/linonetwo/tidgi-language-model/Config/default-runner'>
+  <option value='llama.cpp'>llama.cpp</option>
+  <option value='llm-rs'>llm-rs</option>
+  <option value='rwkv.cpp'>rwkv.cpp</option>
+</$select>
+: 各运行器支持的模型见 [[https://llama-node.vercel.app/zh-Hans/docs/model]]

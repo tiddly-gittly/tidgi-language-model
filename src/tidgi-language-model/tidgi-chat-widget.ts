@@ -3,6 +3,9 @@ import { widget as Widget } from '$:/core/modules/widgets/widget.js';
 import { HTMLTags, IChangedTiddlers, IParseTreeNode, IWidgetEvent, IWidgetInitialiseOptions } from 'tiddlywiki';
 import { ChatGPTOptions, historyManager, isChinese, renderChatingConversation, renderConversation } from './utils';
 import './style.less';
+import type { Observable } from 'rxjs';
+import { LanguageModelRunner } from './constant';
+import type { ILLMResultPart } from './type';
 
 class ChatGPTWidget extends Widget {
   private containerNodeTag: HTMLTags = 'div';
@@ -106,7 +109,7 @@ class ChatGPTWidget extends Widget {
   }
 
   render(parent: Element, nextSibling: Element | null) {
-    if ($tw.browser === undefined || window?.observables?.languageModel?.runLLama$ === undefined) {
+    if ($tw.browser === undefined) {
       return;
     }
     this.execute();
@@ -119,6 +122,7 @@ class ChatGPTWidget extends Widget {
     }) as HTMLDivElement;
     nextSibling ? nextSibling.before(container) : parent.append(container);
     this.domNodes.push(container);
+    if (window?.observables?.languageModel?.runLanguageModel$ === undefined) return;
     this.chat(container, conversations);
   }
 
@@ -204,6 +208,9 @@ class ChatGPTWidget extends Widget {
           chatInput.value = '';
           apiLock = true;
           chatButton.disabled = true;
+          // get config from tiddlers
+          const runner = $tw.wiki.getTiddlerText('$:/plugins/linonetwo/tidgi-language-model/default-runner', 'llama.cpp' as LanguageModelRunner) as LanguageModelRunner;
+          const cpuCount = Number($tw.wiki.getTiddlerText('$:/plugins/linonetwo/tidgi-language-model/Config/cpu-count', '4')) || 4;
           const id = String(Date.now());
           /**
            * We add stream result to this answer string.
@@ -259,7 +266,7 @@ class ChatGPTWidget extends Widget {
           };
           // 创建 DOM
           const onCancel = async (conversation: HTMLDivElement) => {
-            await window.service.languageModel.abortLLama(id);
+            await window.service.languageModel.abortLanguageModel(runner, id);
             apiLock = false;
             chatButton.disabled = false;
             conversation.remove();
@@ -276,15 +283,37 @@ class ChatGPTWidget extends Widget {
               chatButton.disabled = false;
             };
 
-            window.observables.languageModel.runLLama$({
-              completionOptions: {
-                prompt: `CONTEXT:${attachment}\n${this.systemMessage}\nUSER:${userInputText}\nASSISTANT:\n`,
-              },
-              id,
-            }).subscribe({
+            let runnerResultObserver: Observable<ILLMResultPart>;
+            switch (runner) {
+              case LanguageModelRunner.llamaCpp: {
+                runnerResultObserver = window.observables.languageModel.runLanguageModel$(runner, {
+                  completionOptions: {
+                    prompt: `CONTEXT:${attachment}\n${this.systemMessage}\nUSER:${userInputText}\nASSISTANT:\n`,
+                    nThreads: cpuCount,
+                  },
+                  id,
+                });
+                break;
+              }
+              case LanguageModelRunner.llmRs: {
+                console.error('llm-rs runner Not implemented yet');
+                return;
+              }
+              case LanguageModelRunner.rwkvCpp: {
+                runnerResultObserver = window.observables.languageModel.runLanguageModel$(runner, {
+                  completionOptions: {
+                    prompt: `CONTEXT:${attachment}\n${this.systemMessage}\nUSER:${userInputText}\nASSISTANT:\n`,
+                  },
+                  loadConfig: {
+                    nThreads: cpuCount,
+                  },
+                  id,
+                });
+                break;
+              }
+            }
+            runnerResultObserver.subscribe({
               next: (data) => {
-                // DEBUG: console data
-                console.log(`data`, data);
                 try {
                   if (data.id !== id) return;
                   accumulatedAnswer = `${accumulatedAnswer}${data.token ?? ''}`;

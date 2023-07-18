@@ -1,0 +1,10 @@
+title: $:/plugins/linonetwo/tidgi-language-model/Config/en-GB
+type: text/vnd.tiddlywiki
+
+; Default model runner
+: <$select tiddler='$:/plugins/linonetwo/tidgi-language-model/Config/default-runner'>
+  <option value='llama.cpp'>llama.cpp</option>
+  <option value='llm-rs'>llm-rs</option>
+  <option value='rwkv.cpp'>rwkv.cpp</option>
+</$select>
+: For each runner's supported model, see [[https://llama-node.vercel.app/docs/model]]

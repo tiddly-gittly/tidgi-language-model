@@ -1,15 +1,21 @@
 import type { LoadConfig as LLamaLoadConfig } from 'llama-node/dist/llm/llama-cpp';
+import type { LoadConfig as RwkvLoadConfig } from 'llama-node/dist/llm/rwkv-cpp';
 import type { Observable } from 'rxjs';
 
+export enum LanguageModelRunner {
+  llamaCpp = 'llama.cpp',
+  llmRs = 'llm-rs',
+  rwkvCpp = 'rwkv.cpp',
+}
 export interface ILanguageModelPreferences {
   /**
    * Each runner can load different models. This is the default model file name for each runner.
    * @url https://github.com/Atome-FE/llama-node#supported-models
    */
   defaultModel: {
-    'llama-rs': string;
-    'llama.cpp': string;
-    'rwkv.cpp': string;
+    [LanguageModelRunner.llmRs]: string;
+    [LanguageModelRunner.llamaCpp]: string;
+    [LanguageModelRunner.rwkvCpp]: string;
   };
   /**
    * If a llm stop responding for this long, we will kill the conversation. This basically means it stopped responding.
@@ -55,10 +61,21 @@ export interface ILLAmaCompletionOptions {
   topK?: number;
   topP?: number;
 }
+export interface IRwkvCompletionOptions {
+  maxPredictLength?: number;
+  prompt: string;
+  temp?: number;
+  topP?: number;
+}
 
 export interface IRunLLAmaOptions extends ILLMResultBase {
   completionOptions: ILLAmaCompletionOptions;
   loadConfig?: Partial<LLamaLoadConfig>;
+  modelName?: string;
+}
+export interface IRunRwkvOptions extends ILLMResultBase {
+  completionOptions: IRwkvCompletionOptions;
+  loadConfig?: Partial<RwkvLoadConfig>;
   modelName?: string;
 }
 
@@ -73,8 +90,9 @@ export interface IRunLLAmaOptions extends ILLMResultBase {
  * Run language model on a shared worker, and queue requests to the worker.
  */
 export interface ILanguageModelService {
-  abortLLama(id: string): Promise<void>;
-  runLLama$(options: IRunLLAmaOptions): Observable<ILLMResultPart>;
+  abortLanguageModel(runner: LanguageModelRunner, id: string): Promise<void>;
+  runLanguageModel$(runner: LanguageModelRunner.llamaCpp, options: IRunLLAmaOptions): Observable<ILLMResultPart>;
+  runLanguageModel$(runner: LanguageModelRunner.rwkvCpp, options: IRunRwkvOptions): Observable<ILLMResultPart>;
 }
 
 declare global {

@@ -4,11 +4,15 @@ caption: ChatGPT
 
 <$list filter="[[$:/language]get[text]removeprefix[$:/languages/]else[en-GB]]" variable="lang">
 <$list filter="[<lang>search[zh]]">
+
   {{$:/plugins/linonetwo/tidgi-language-model/readme/zh-Hans}}
+
 </$list>
 
 <$list filter="[<lang>!search[zh]]">
   {{$:/plugins/linonetwo/tidgi-language-model/readme/en-GB}}
+
+</$list>
 </$list>
 
 ```typescript

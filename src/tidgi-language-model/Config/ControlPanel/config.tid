@@ -1,0 +1,18 @@
+title: $:/plugins/linonetwo/tidgi-language-model/Config
+tags: $:/tags/ControlPanel/SettingsTab
+type: text/vnd.tiddlywiki
+caption: TG AI
+
+<$list filter="[[$:/language]get[text]removeprefix[$:/languages/]else[en-GB]]" variable="lang">
+<$list filter="[<lang>search[zh]]">
+
+{{$:/plugins/linonetwo/tidgi-language-model/Config/zh-Hans}}
+
+</$list>
+
+<$list filter="[<lang>!search[zh]]">
+
+{{$:/plugins/linonetwo/tidgi-language-model/Config/en-GB}}
+
+</$list>
+</$list>
