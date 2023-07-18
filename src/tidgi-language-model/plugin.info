@@ -4,7 +4,7 @@
   "author": "LinOnetwo",
   "description": "Chat with TidGi's build-in language model service (LLama/Rwkv) in Tiddlywiki. A private, local and rooted ChatGPT AI.",
   "plugin-type": "plugin",
-  "dependents": ["$:/plugins/linonetwo/markdown-transformer"],
-  "version": "0.1.0",
+  "dependents": [],
+  "version": "0.1.1",
   "list": "readme config"
 }
