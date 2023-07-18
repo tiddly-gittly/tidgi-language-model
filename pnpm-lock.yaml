@@ -12,6 +12,12 @@ dependencies:
     version: 0.0.39(postcss@8.4.26)(ts-node@10.9.1)
 
 devDependencies:
+  '@llama-node/llama-cpp':
+    specifier: ^0.1.6
+    version: 0.1.6
+  '@llama-node/rwkv-cpp':
+    specifier: ^0.1.6
+    version: 0.1.6
   '@modern-js/tsconfig':
     specifier: ^2.26.0
     version: 2.26.0
@@ -334,13 +340,11 @@ packages:
     resolution: {integrity: sha512-AzU2Gc5bX5V74SnO9E17IA5N/Rbd8trd7qkzp/H4zmmz/Chh7MmaiUhAewUt7kPuk3/LahGiDxxAOjiKtMJiNQ==}
     engines: {node: '>= 10'}
     dev: true
-    optional: true
 
   /@llama-node/rwkv-cpp@0.1.6:
     resolution: {integrity: sha512-kaB01kfwthz/euHE67MWDzrZacFL9CSPsDcQx4ZLJii98HQCiuQ24g6CU8cVFYRm45a/o0qCjR4G/j1TyPIl8g==}
     engines: {node: '>= 10'}
     dev: true
-    optional: true
 
   /@modern-js/tsconfig@2.26.0:
     resolution: {integrity: sha512-vwXFJNC3Z390JnCwzy/KCi+dOAcK2NqM0RD2mh6lDWePexDuiG1bl6JTi8PtiPJtTC7pWB42AvgolQAMENsNEQ==}

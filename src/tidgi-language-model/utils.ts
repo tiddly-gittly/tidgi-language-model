@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 export const CHAT_COMPLETION_URL = 'https://api.openai.com/v1/chat/completions';
 
 export interface ChatHistory {
@@ -5,16 +6,6 @@ export interface ChatHistory {
   attachment: string;
   created: number;
   id: string;
-  user: string;
-}
-
-export interface ChatGPTOptions {
-  frequency_penalty: number;
-  max_tokens: number;
-  model: string;
-  presence_penalty: number;
-  temperature: number;
-  top_p: number;
   user: string;
 }
 
@@ -92,7 +83,7 @@ export const renderConversation = (
             text: new Date(created).toLocaleString(),
           }),
           $tw.utils.domMaker('p', { text: user }),
-          $tw.utils.domMaker('pre', { text: attachment }),
+          ...((attachment) ? [$tw.utils.domMaker('pre', { text: attachment })] : []),
           ...((deleteButton === undefined) ? [] : [deleteButton]),
           ...((editButton === undefined) ? [] : [editButton]),
         ],

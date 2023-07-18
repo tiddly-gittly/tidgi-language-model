@@ -13,3 +13,7 @@ type: text/vnd.tiddlywiki
 : Please use Task Manager to see how many cores your computer has.
 
 > Please note that some computers use Hyper-Threading or Big-Small cores, and one physical core may be treated as two logical cores by the operating system, etc. In this case, you should fill in the number of physical cores, or the larger the number, the slower the CPU will be when it exceeds a certain value.
+
+; Timeout (minutes)
+: <$edit-text tiddler='$:/plugins/linonetwo/tidgi-language-model/Config/timeout' tag='input' type='number' />
+: After waiting this long, if the language model doesn't say anything, abort the generation to prevent it from getting stuck in a dead loop. If the language model often aborts for no reason, you can increase this value.

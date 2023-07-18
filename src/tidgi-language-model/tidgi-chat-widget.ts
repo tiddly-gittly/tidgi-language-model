@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { widget as Widget } from '$:/core/modules/widgets/widget.js';
 import { HTMLTags, IChangedTiddlers, IParseTreeNode, IWidgetEvent, IWidgetInitialiseOptions } from 'tiddlywiki';
-import { ChatGPTOptions, historyManager, isChinese, renderChatingConversation, renderConversation } from './utils';
+import { historyManager, isChinese, renderChatingConversation, renderConversation } from './utils';
 import './style.less';
 import type { Observable } from 'rxjs';
 import { LanguageModelRunner } from './constant';
-import type { ILLMResultPart } from './type';
+import type { ILLMResultPart, IRunLLAmaOptions, IRunRwkvOptions, RwkvInvocation } from './type';
 
 class ChatGPTWidget extends Widget {
   private containerNodeTag: HTMLTags = 'div';
@@ -68,7 +68,8 @@ class ChatGPTWidget extends Widget {
 
   private readonly = false;
 
-  private chatGPTOptions: Partial<ChatGPTOptions> = {};
+  private runLanguageModelOptions: Partial<IRunLLAmaOptions | IRunRwkvOptions> = {};
+  private runner = LanguageModelRunner.llamaCpp;
 
   private systemMessage = '';
 
@@ -84,26 +85,31 @@ class ChatGPTWidget extends Widget {
     this.scroll = this.getAttribute('scroll')?.toLowerCase?.() === 'yes';
     this.readonly = this.getAttribute('readonly')?.toLowerCase?.() === 'yes';
 
-    const temperature = Number(this.getAttribute('temperature'));
-    const topP = Number(this.getAttribute('top_p'));
-    const maxTokens = Number.parseInt(this.getAttribute('max_tokens')!, 10);
-    const presencePenalty = Number(this.getAttribute('presence_penalty'));
-    const frequencyPenalty = Number(this.getAttribute('frequency_penalty'));
-    this.chatGPTOptions = {
-      model: this.getAttribute('model', 'llama'),
-      temperature: temperature >= 0 && temperature <= 2 ? temperature : undefined,
-      top_p: topP >= 0 && topP <= 1 ? topP : undefined,
-      max_tokens: Number.isSafeInteger(maxTokens) && maxTokens > 0
-        ? maxTokens
-        : undefined,
-      presence_penalty: presencePenalty >= -2 && presencePenalty <= 2
-        ? presencePenalty
-        : undefined,
-      frequency_penalty: frequencyPenalty >= -2 && frequencyPenalty <= 2
-        ? frequencyPenalty
-        : undefined,
-      user: this.getAttribute('user'),
+    this.runner = this.getAttribute('runner', LanguageModelRunner.llamaCpp) as LanguageModelRunner;
+
+    const temperature = Number(this.getAttribute('temp'));
+    const topP = Number(this.getAttribute('topP'));
+    const maxPredictLength = Number.parseInt(this.getAttribute('maxPredictLength')!, 10);
+    const presencePenalty = Number(this.getAttribute('presencePenalty'));
+    const frequencyPenalty = Number(this.getAttribute('frequencyPenalty'));
+    this.runLanguageModelOptions = {
+      completionOptions: {} as unknown as RwkvInvocation,
     };
+    if (Number.isSafeInteger(maxPredictLength) && maxPredictLength > 0) {
+      (this.runLanguageModelOptions.completionOptions as RwkvInvocation).maxPredictLength = maxPredictLength;
+    }
+    if (temperature >= 0 && temperature <= 2) {
+      (this.runLanguageModelOptions.completionOptions as RwkvInvocation).temp = temperature;
+    }
+    if (topP >= 0 && topP <= 1) {
+      (this.runLanguageModelOptions.completionOptions as RwkvInvocation).topP = topP;
+    }
+    if (presencePenalty >= -2 && presencePenalty <= 2) {
+      (this.runLanguageModelOptions.completionOptions as RwkvInvocation).presencePenalty = presencePenalty;
+    }
+    if (frequencyPenalty >= -2 && frequencyPenalty <= 2) {
+      (this.runLanguageModelOptions.completionOptions as RwkvInvocation).frequencyPenalty = frequencyPenalty;
+    }
     this.systemMessage = this.getAttribute('system_message', 'A chat between a user and an assistant. You are a helpful assistant.\nUSER:');
     this.makeChildWidgets();
   }
@@ -208,7 +214,10 @@ class ChatGPTWidget extends Widget {
           apiLock = true;
           chatButton.disabled = true;
           // get config from tiddlers
-          const runner = $tw.wiki.getTiddlerText('$:/plugins/linonetwo/tidgi-language-model/default-runner', 'llama.cpp' as LanguageModelRunner) as LanguageModelRunner;
+          const runner = $tw.wiki.getTiddlerText(
+            '$:/plugins/linonetwo/tidgi-language-model/Config/default-runner',
+            this.runner || 'llama.cpp' as LanguageModelRunner,
+          ) as LanguageModelRunner;
           const cpuCount = Number($tw.wiki.getTiddlerText('$:/plugins/linonetwo/tidgi-language-model/Config/cpu-count', '4')) || 4;
           const id = String(Date.now());
           /**
@@ -290,7 +299,8 @@ class ChatGPTWidget extends Widget {
               case LanguageModelRunner.llamaCpp: {
                 runnerResultObserver = window.observables.languageModel.runLanguageModel$(runner, {
                   completionOptions: {
-                    prompt: `CONTEXT:${attachment}\n${this.systemMessage}\nUSER:${userInputText}\nASSISTANT:\n`,
+                    prompt: `CONTEXT:${attachment}\n${this.systemMessage}\nUSER:${userInputText}\nASSISTANT:`,
+                    ...this.runLanguageModelOptions?.completionOptions,
                     nThreads: cpuCount,
                   },
                   id,
@@ -304,7 +314,8 @@ class ChatGPTWidget extends Widget {
               case LanguageModelRunner.rwkvCpp: {
                 runnerResultObserver = window.observables.languageModel.runLanguageModel$(runner, {
                   completionOptions: {
-                    prompt: `CONTEXT:${attachment}\n${this.systemMessage}\nUSER:${userInputText}\nASSISTANT:\n`,
+                    prompt: `CONTEXT:${attachment}\n${this.systemMessage}\nUSER:${userInputText}\nASSISTANT:`,
+                    ...this.runLanguageModelOptions?.completionOptions,
                   },
                   loadConfig: {
                     nThreads: cpuCount,

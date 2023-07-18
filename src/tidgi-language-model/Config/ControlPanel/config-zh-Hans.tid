@@ -13,3 +13,7 @@ type: text/vnd.tiddlywiki
 : 请使用任务管理器查看你的电脑拥有的核心数。
 
 > 要注意有的电脑使用了 Hyper-Threading 或大小核等技术，有一个物理核心可能会被操作系统视为两个逻辑核心等等情况，此时核心数应该填写物理核心数，不然超过某个值后，填得越大反而越慢。
+
+; 超时时间（分钟）
+: <$edit-text tiddler='$:/plugins/linonetwo/tidgi-language-model/Config/timeout' tag='input' type='number' />
+: 等待这么长时间之后，如果语言模型还一言不发，就中止生成，防止陷入死循环。如果语言模型经常无缘无故中止生成，可以适当增加这个值。

@@ -31,6 +31,8 @@
     ]
   },
   "devDependencies": {
+    "@llama-node/llama-cpp": "^0.1.6",
+    "@llama-node/rwkv-cpp": "^0.1.6",
     "@modern-js/tsconfig": "^2.26.0",
     "@types/node": "^20.4.2",
     "dprint": "^0.39.1",
