@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { widget as Widget } from '$:/core/modules/widgets/widget.js';
 import { HTMLTags, IChangedTiddlers, IParseTreeNode, IWidgetEvent, IWidgetInitialiseOptions } from 'tiddlywiki';
-import { historyManager, isChinese, renderChatingConversation, renderConversation } from './utils';
+import { historyManager, isChinese, renderChattingConversation, renderConversation } from './utils';
 import './style.less';
 import type { Observable } from 'rxjs';
 import { LanguageModelRunner } from './constant';
@@ -279,7 +279,18 @@ class ChatGPTWidget extends Widget {
             chatButton.disabled = false;
             conversation.remove();
           };
-          const { conversation, answerBox, printError } = renderChatingConversation(zh, userInputText, this.cancelButtonText, conversations, onCancel, attachment);
+          const { conversation, answerBox, printError } = renderChattingConversation({
+            zh,
+            user: userInputText,
+            attachment,
+            onCancel,
+            onEdit: fillChatInput,
+            conversations,
+            editButtonText: this.editButtonText,
+            deleteButtonText: this.deleteButtonText,
+            copyButtonText: this.copyButtonText,
+            cancelButtonText: this.cancelButtonText,
+          });
           conversations.prepend(conversation);
 
           // if no tidgi service, not actually calling api

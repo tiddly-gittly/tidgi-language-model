@@ -11,28 +11,18 @@ export interface ChatHistory {
 
 export const isChinese = () => $tw.wiki.getTiddler('$:/language')!.fields.text.includes('zh');
 
-export const renderConversation = (
-  { id, assistant, user, created, attachment }: ChatHistory,
-  zh: boolean,
-  editButtonText: string,
-  deleteButtonText: string,
-  copyButtonText: string,
-  onEdit?: (user: string, attachment?: string) => void,
-  onDelete?: () => void,
-) => {
-  let editButton: HTMLButtonElement | undefined;
-  if (onEdit !== undefined) {
-    editButton = $tw.utils.domMaker('button', {
-      class: 'edit-button',
-      innerHTML: editButtonText,
-      attributes: {
-        title: zh ? '重新生成问题' : 'Regenerate question',
-      },
-    });
-    editButton.addEventListener('click', () => {
-      onEdit(user, attachment);
-    });
-  }
+export const getChatResultUserButton = (parameters: {
+  assistant: string;
+  attachment?: string;
+  copyButtonText: string;
+  deleteButtonText: string;
+  editButtonText: string;
+  onDelete?: () => void;
+  onEdit?: (user: string, attachment?: string) => void;
+  user: string;
+  zh: boolean;
+}) => {
+  const { zh, deleteButtonText, copyButtonText, editButtonText, assistant, onDelete, onEdit, user, attachment } = parameters;
   let deleteButton: HTMLButtonElement | undefined;
   if (onDelete !== undefined) {
     deleteButton = $tw.utils.domMaker('button', {
@@ -56,6 +46,47 @@ export const renderConversation = (
   copyButton.addEventListener('click', () => {
     $tw.utils.copyToClipboard(assistant);
   });
+  let editButton: HTMLButtonElement | undefined;
+  if (onEdit !== undefined) {
+    editButton = $tw.utils.domMaker('button', {
+      class: 'edit-button',
+      innerHTML: editButtonText,
+      attributes: {
+        title: zh ? '重新生成问题' : 'Regenerate question',
+      },
+    });
+    editButton.addEventListener('click', () => {
+      onEdit(user, attachment);
+    });
+  }
+  return {
+    deleteButton,
+    copyButton,
+    editButton,
+  };
+};
+
+export const renderConversation = (
+  { id, assistant, user, created, attachment }: ChatHistory,
+  zh: boolean,
+  editButtonText: string,
+  deleteButtonText: string,
+  copyButtonText: string,
+  onEdit?: (user: string, attachment?: string) => void,
+  onDelete?: () => void,
+) => {
+  const { deleteButton, copyButton, editButton } = getChatResultUserButton({
+    zh,
+    deleteButtonText,
+    copyButtonText,
+    editButtonText,
+    assistant,
+    onDelete,
+    onEdit,
+    user,
+    attachment,
+  });
+
   return $tw.utils.domMaker('div', {
     class: 'chatgpt-conversation',
     attributes: {
@@ -92,14 +123,30 @@ export const renderConversation = (
   });
 };
 
-export const renderChatingConversation = (
-  zh: boolean,
-  user: string,
-  cancelButtonText: string,
-  conversations: HTMLElement,
-  onCancel?: (conversation: HTMLDivElement) => void,
-  attachment?: string,
-) => {
+export const renderChattingConversation = (parameters: {
+  attachment?: string;
+  cancelButtonText: string;
+  conversations: HTMLElement;
+  copyButtonText: string;
+  deleteButtonText: string;
+  editButtonText: string;
+  onCancel?: (conversation: HTMLDivElement) => void;
+  onEdit?: (user: string, attachment?: string) => void;
+  user: string;
+  zh: boolean;
+}) => {
+  const {
+    zh,
+    user,
+    cancelButtonText,
+    conversations,
+    onCancel,
+    attachment,
+    editButtonText,
+    deleteButtonText,
+    copyButtonText,
+    onEdit,
+  } = parameters;
   const answerBox = $tw.utils.domMaker('pre', {
     text: zh ? '思考中...' : 'Thinking...',
     style: {
@@ -145,27 +192,46 @@ export const renderChatingConversation = (
             text: new Date().toLocaleString(),
           }),
           $tw.utils.domMaker('p', { text: user }),
-          $tw.utils.domMaker('pre', { text: attachment }),
+          ...((attachment) ? [$tw.utils.domMaker('pre', { text: attachment })] : []),
         ],
       }),
     ],
   });
   const printError = (error: string) => {
     conversation.remove();
+    // eslint-disable-next-line prefer-const
+    let errorResultDiv: HTMLDivElement | undefined;
+    const { deleteButton, editButton } = getChatResultUserButton({
+      zh,
+      deleteButtonText,
+      copyButtonText,
+      editButtonText,
+      assistant: error,
+      onDelete: () => errorResultDiv?.remove(),
+      onEdit,
+      user,
+      attachment,
+    });
+    errorResultDiv = $tw.utils.domMaker('div', {
+      class: 'chatgpt-conversation chatgpt-conversation-error',
+      children: [
+        $tw.utils.domMaker('div', {
+          class: 'chatgpt-conversation-message chatgpt-conversation-assistant',
+          text: error,
+        }),
+        $tw.utils.domMaker('div', {
+          class: 'chatgpt-conversation-message chatgpt-conversation-user',
+          children: [
+            $tw.utils.domMaker('p', { text: user }),
+            ...((attachment) ? [$tw.utils.domMaker('pre', { text: attachment })] : []),
+            ...((deleteButton === undefined) ? [] : [deleteButton]),
+            ...((editButton === undefined) ? [] : [editButton]),
+          ],
+        }),
+      ],
+    });
     conversations.append(
-      $tw.utils.domMaker('div', {
-        class: 'chatgpt-conversation chatgpt-conversation-error',
-        children: [
-          $tw.utils.domMaker('div', {
-            class: 'chatgpt-conversation-message chatgpt-conversation-user',
-            children: [$tw.utils.domMaker('p', { text: user })],
-          }),
-          $tw.utils.domMaker('div', {
-            class: 'chatgpt-conversation-message chatgpt-conversation-assistant',
-            text: error,
-          }),
-        ],
-      }),
+      errorResultDiv,
     );
   };
   return { conversation, answerBox, printError };
