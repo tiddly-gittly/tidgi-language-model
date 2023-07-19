@@ -10,23 +10,8 @@ caption: ChatGPT
 </$list>
 
 <$list filter="[<lang>!search[zh]]">
+
   {{$:/plugins/linonetwo/tidgi-language-model/readme/en-GB}}
 
 </$list>
 </$list>
-
-```typescript
-interface ChatCompletionEvent {
-  event: Event;
-  type: 'tidgi-chat';
-  name: 'completion-finish';
-  paramObject: {
-    id: string;        // Chat id from OpenAI
-    created: Date;     // Chat time
-    assistant: string; // Answer of ChatGPT
-    user: string;      // Your question
-  };
-  widget: ChatGPTWidget;
-  historyTiddler: string;
-}
-```

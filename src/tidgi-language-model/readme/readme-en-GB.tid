@@ -1,0 +1,26 @@
+title: $:/plugins/linonetwo/tidgi-language-model/readme/en-GB
+type: text/vnd.tiddlywiki
+
+Using LLaMa in TiddlyWiki.
+
+!! Chatting in the sidebar
+
+Your sidebar will have an extra TG AI page, you can have a conversation directly, the history of the conversation will be saved in [[a state tiddler|$:/state/plugins/linonetwo/tidgi-language-model/side-bar-history]]. If you want to clear the history, just delete the tiddler pointed to by the `history` parameter, too remember that since this is a NodeJS wiki, it doesn't save the state entries, they are cleared after refresh, so please save them yourself as needed.
+
+To get an answer from the AI, enter text into the textarea and hit enter or click the {{$:/core/images/add-comment}} "Chat" button on the right side of the textarea. If you want to enter multiple lines of text, you can use Shift + Enter to change lines. There is a grabber in the bottom right corner of the textarea to drag the textarea to the height you want.
+
+Clicking the {{$:/core/images/import-button}} "Attach Tiddler" button on the left side of the textarea opens a input box at the top of the textarea. Enter the title of the tiddler or a filter expression here (both needs to satisfy the Tiddlywiki filter expression syntax), and keep the box open to import the content of that tiddler into the textarea. This allows you to perform various advanced operations such as:
+
+# Expand this tiddler
+# Rewrite the content of this tiddler
+# Translate the tiddler into Chinese
+
+!! Using Widgets
+
+LLaMa is actually a widget that allows you to customize the chatbot according to your needs:
+
+```html
+<$tidgi-chat />
+```
+
+Read [[readme/en-GB/Widget|$:/plugins/linonetwo/tidgi-language-model/readme/en-GB/Widget]] for more information.

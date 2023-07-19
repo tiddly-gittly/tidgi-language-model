@@ -1,0 +1,26 @@
+title: $:/plugins/linonetwo/tidgi-language-model/readme/zh-Hans
+type: text/vnd.tiddlywiki
+
+在 TiddlyWiki 中使用 LLaMa。
+
+!! 在侧边栏聊天
+
+你的侧边栏会多出一个 TG AI 页面，可以直接进行对话，对话的历史会保存在 [[一个state条目里|$:/state/plugins/linonetwo/tidgi-language-model/side-bar-history]]。如要清除历史记录，则直接删除 `history` 参数指向的条目，太记因为是 NodeJS wiki，所以不会保存 state 条目，刷新后就清空，请按需自己保存。
+
+在对话框中输入文本，按下回车键或点击对话框右侧的 {{$:/core/images/add-comment}}「进行对话」按钮，就可以得到 AI 的回答。如果你想要输入多行文本，可以使用 Shift + 回车来换行。对话框右下角有一个抓手可以把对话框拖大到你想要的高度。
+
+点击对话框左侧的 {{$:/core/images/import-button}}「附加条目」按钮，可以在对话框上方打开一个输入筛选器的输入框，在这边输入你想要的条目标题或筛选器（需要符合筛选器语法），保持这个输入框开启，就可以将该条目的内容导入到对话框中，这样就可以实现各种高级功能例如：
+
+# 扩写这个条目内容
+# 改写这个条目内容
+# 翻译内容为英文
+
+!! 使用微件
+
+LLaMa 实际上是一个微件，你可以按照自己的需求定制聊天机器人：
+
+```html
+<$tidgi-chat />
+```
+
+详细参数和用法见[[readme/zh-Hans/Widget|$:/plugins/linonetwo/tidgi-language-model/readme/zh-Hans/Widget]]。

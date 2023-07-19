@@ -1,26 +1,4 @@
-title: $:/plugins/linonetwo/tidgi-language-model/readme/zh-Hans
-type: text/vnd.tiddlywiki
-
-在 TiddlyWiki 中使用 LLaMa。
-
-你的侧边栏会多出一个 TG AI 页面，可以直接进行对话，对话的历史会保存。如要清除历史记录，则直接删除 `history` 参数指向的条目。
-
-LLaMa 实际上是一个微件，你可以按照自己的需求定制聊天机器人：
-
-```html
-<$tidgi-chat />
-```
-
-还可以添加各种可选参数来定制行为：
-
-|!参数 |!解释 |
-|history |填写一个条目的标题，用于持久化存储聊天记录 |
-|component |微件的DOM标签类型，默认为div |
-|className |微件的类名，用于自定义样式 |
-|readonly |如果为readonly，则不会出现对话输入框，配合history参数仅做展示用 |
-|system_message |系统消息，用于AI的行为，例如"你是一个经验丰富的律师" |
-
-除此之外，还支持如下 LLaMa 参数：
+title: $:/plugins/linonetwo/tidgi-language-model/readme/types/LLaMa
 
 ```ts
 interface Generate {
@@ -118,33 +96,3 @@ interface Generate {
   prompt: string
 }
 ```
-
-
-或 RWKV 参数
-
-```ts
-interface RwkvInvocation {
-  maxPredictLength: number
-  topP: number
-  temp: number
-  endToken?: number
-  endString?: string
-  seed?: number
-  prompt: string
-  isSkipGeneration?: boolean
-  sessionFilePath?: string
-  isOverwriteSessionFile?: boolean
-  presencePenalty?: number
-  frequencyPenalty?: number
-}
-```
-
-其具体用法可以查看[[官方文档|https://llama-node.vercel.app/docs/backends/llama.cpp/inference]]。
-
-现在还没有做多轮对话，即便是在一个微件里聊的，也都是单轮对话，多轮对话等下个版本再搞。
-
-!! 高级
-
-如果在微件中嵌套自己的 action，就可以在对话完成时拿到回答的结果，这需要你知道该如何编写一个支持 action 的微件。输出的结果保存在 `output-text` 变量中。
-
-同时，在对话完成时你也可以捕获到微件的冒泡事件，以及全局事件，二者分别使用`addEventListener`和`$tw.hooks.addHook`(事件名称就是`tidgi-chat`)来实现。如下是事件负载的类型定义：
