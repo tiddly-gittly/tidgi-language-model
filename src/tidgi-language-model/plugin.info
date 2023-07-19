@@ -1,6 +1,6 @@
 {
   "title": "$:/plugins/linonetwo/tidgi-language-model",
-  "name": "ChatGPT",
+  "name": "TG AI",
   "author": "LinOnetwo",
   "description": "Chat with TidGi's build-in language model service (LLama/Rwkv) in Tiddlywiki. A private, local and rooted ChatGPT AI.",
   "plugin-type": "plugin",
