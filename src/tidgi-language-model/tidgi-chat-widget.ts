@@ -110,7 +110,7 @@ class ChatGPTWidget extends Widget {
     if (frequencyPenalty >= -2 && frequencyPenalty <= 2) {
       (this.runLanguageModelOptions.completionOptions as RwkvInvocation).frequencyPenalty = frequencyPenalty;
     }
-    this.systemMessage = this.getAttribute('system_message', 'A chat between a user and an assistant. You are a helpful assistant.\nUSER:');
+    this.systemMessage = this.getAttribute('system_message', 'A chat between a user and an assistant. You are a helpful assistant.\n');
     this.makeChildWidgets();
   }
 
