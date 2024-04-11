@@ -5,7 +5,7 @@ import { IChangedTiddlers, IParseTreeNode, IWidgetEvent, IWidgetInitialiseOption
 import { historyManager, isChinese, renderChattingConversation, renderConversation } from './utils';
 import './style.less';
 import type { Observable } from 'rxjs';
-import { ILanguageModelAPIResponse, type ILLMResultPart, type IRunLLAmaOptions, LanguageModelRunner } from './languageModel';
+import { ILanguageModelAPIResponse, type IRunLLAmaOptions, LanguageModelRunner } from './languageModel';
 
 class ChatGPTWidget extends Widget {
   private containerNodeTag: keyof HTMLElementTagNameMap = 'div';
@@ -93,7 +93,7 @@ class ChatGPTWidget extends Widget {
     this.scroll = this.getAttribute('scroll')?.toLowerCase?.() === 'yes';
     this.readonly = this.getAttribute('readonly')?.toLowerCase?.() === 'yes';
 
-    const DefaultModelRunner = $tw.wiki.getTiddlerText('$:/plugins/linonetwo/tidgi-language-model/configs/DefaultModelRunner')  as LanguageModelRunner | undefined;
+    const DefaultModelRunner = $tw.wiki.getTiddlerText('$:/plugins/linonetwo/tidgi-language-model/configs/DefaultModelRunner') as LanguageModelRunner | undefined;
     this.runner = this.getAttribute('runner', DefaultModelRunner || LanguageModelRunner.llamaCpp) as LanguageModelRunner;
 
     const temperature = Number(this.getAttribute('temperature'));
@@ -282,7 +282,7 @@ class ChatGPTWidget extends Widget {
             chatButton.disabled = false;
             conversation.remove();
           };
-          const { conversation, answerBox, printError } = renderChattingConversation({
+          const { conversation, answerBox, printError, updateProgress } = renderChattingConversation({
             zh,
             user: userInputText,
             attachment,
@@ -327,9 +327,8 @@ class ChatGPTWidget extends Widget {
                 try {
                   if (data.id !== id) return;
                   if ('type' in data && data.type === 'progress') {
-
+                    updateProgress(data.percentage);
                   } else if ('token' in data) {
-
                     accumulatedAnswer = `${accumulatedAnswer}${data.token ?? ''}`;
                     answerBox.textContent = `${accumulatedAnswer}█`;
                     created = Date.now();

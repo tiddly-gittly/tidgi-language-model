@@ -157,6 +157,36 @@ export const renderChattingConversation = (parameters: {
       border: 'none',
     },
   });
+  const progressTextElement = $tw.utils.domMaker('span', {
+    text: `0%`,
+    style: {
+      marginLeft: '0.5em',
+    },
+  });
+  const progressBox = $tw.utils.domMaker('div', {
+    text: zh ? '模型加载中' : 'Modal Loading',
+    style: {
+      display: 'none',
+      background: 'transparent',
+      marginTop: '0',
+      marginBottom: '0',
+      padding: '0',
+      border: 'none',
+    },
+    children: [progressTextElement],
+  });
+  const updateProgress = (progress: number | undefined) => {
+    const inLoadingProgress = progress !== undefined && progress < 1;
+    if (inLoadingProgress) {
+      answerBox.style.display = 'none';
+      progressBox.style.display = 'block';
+      const progressText = `${(progress * 100).toFixed(2)}%`;
+      progressTextElement.innerText = progressText;
+    } else {
+      answerBox.style.display = 'block';
+      progressBox.style.display = 'none';
+    }
+  };
   // eslint-disable-next-line prefer-const
   let conversation: HTMLDivElement;
   let cancelButton: HTMLButtonElement | undefined;
@@ -179,7 +209,7 @@ export const renderChattingConversation = (parameters: {
         class: 'chatgpt-conversation-message chatgpt-conversation-assistant',
         children: [
           $tw.utils.domMaker('p', {
-            children: [answerBox],
+            children: [progressBox, answerBox],
           }),
           ...((cancelButton === undefined) ? [] : [cancelButton]),
         ],
@@ -234,7 +264,7 @@ export const renderChattingConversation = (parameters: {
       errorResultDiv,
     );
   };
-  return { conversation, answerBox, printError };
+  return { conversation, answerBox, printError, updateProgress };
 };
 
 export const historyManager = (tiddler: string) => ({
