@@ -3,12 +3,14 @@
  * And only import type here.
  * 
  * - And remove ` & Pick<LlamaModelOptions, 'modelPath'>`
+ * - delete LanguageModelServiceIPCDescriptor and some related imports
  */
-import type { LLamaChatPromptOptions, LlamaModelOptions } from 'node-llama-cpp';
+import { LLamaChatPromptOptions, LlamaModelOptions } from 'node-llama-cpp';
 import type { Observable } from 'rxjs';
 
 export enum LanguageModelRunner {
   llamaCpp = 'llama.cpp',
+  // rwkvCpp = 'rwkv.cpp',
 }
 export interface ILanguageModelPreferences {
   /**
@@ -71,6 +73,16 @@ export interface IRunLLAmaOptions extends ILLMResultBase {
  * Run language model on a shared worker, and queue requests to the worker.
  */
 export interface ILanguageModelService {
+  /**
+   * Abort a chat response generation.
+   */
   abortLanguageModel(runner: LanguageModelRunner, id: string): Promise<void>;
+  /**
+   * Generate text based on options (including prompt).
+   */
   runLanguageModel$(runner: LanguageModelRunner.llamaCpp, options: IRunLLAmaOptions): Observable<ILLMResultPart>;
+  /**
+   * Unload model from memory. So it is possible to load another model, or to free up memory.
+   */
+  unloadLanguageModel(runner: LanguageModelRunner): Promise<void>;
 }
