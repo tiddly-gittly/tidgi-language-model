@@ -1,6 +1,6 @@
 created: 20230718115900670
-modified: 20230718115900670
+modified: 20240411165321186
 title: $:/config/DefaultSidebarTab
 type: text/vnd.tiddlywiki
 
-$:/plugins/linonetwo/tidgi-language-model/side-bar
+$:/plugins/linonetwo/tidgi-language-model/SidebarTab

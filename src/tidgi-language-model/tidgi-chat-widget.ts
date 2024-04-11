@@ -5,7 +5,7 @@ import { IChangedTiddlers, IParseTreeNode, IWidgetEvent, IWidgetInitialiseOption
 import { historyManager, isChinese, renderChattingConversation, renderConversation } from './utils';
 import './style.less';
 import type { Observable } from 'rxjs';
-import { type ILLMResultPart, type IRunLLAmaOptions, LanguageModelRunner } from './languageModel';
+import { ILanguageModelAPIResponse, type ILLMResultPart, type IRunLLAmaOptions, LanguageModelRunner } from './languageModel';
 
 class ChatGPTWidget extends Widget {
   private containerNodeTag: keyof HTMLElementTagNameMap = 'div';
@@ -308,7 +308,7 @@ class ChatGPTWidget extends Widget {
               chatButton.disabled = false;
             };
 
-            let runnerResultObserver: Observable<ILLMResultPart>;
+            let runnerResultObserver: Observable<ILanguageModelAPIResponse>;
             switch (runner) {
               case LanguageModelRunner.llamaCpp: {
                 runnerResultObserver = window.observables.languageModel.runLanguageModel$(runner, {
@@ -326,9 +326,14 @@ class ChatGPTWidget extends Widget {
               next: (data) => {
                 try {
                   if (data.id !== id) return;
-                  accumulatedAnswer = `${accumulatedAnswer}${data.token ?? ''}`;
-                  answerBox.textContent = `${accumulatedAnswer}█`;
-                  created = Date.now();
+                  if ('type' in data && data.type === 'progress') {
+
+                  } else if ('token' in data) {
+
+                    accumulatedAnswer = `${accumulatedAnswer}${data.token ?? ''}`;
+                    answerBox.textContent = `${accumulatedAnswer}█`;
+                    created = Date.now();
+                  }
                 } catch (error) {
                   onerror(error as Error);
                 }

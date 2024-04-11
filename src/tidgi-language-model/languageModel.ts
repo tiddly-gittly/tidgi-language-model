@@ -35,6 +35,7 @@ export interface ILLMResultBase {
   id: string;
 }
 export type ILanguageModelWorkerResponse = INormalLanguageModelLogMessage | ILanguageModelWorkerResult | ILanguageModelLoadProgress;
+export type ILanguageModelAPIResponse = ILanguageModelLoadProgress | ILLMResultPart;
 export interface INormalLanguageModelLogMessage extends ILLMResultBase {
   /** for error, use `observer.error` instead */
   level: 'debug' | 'warn' | 'info';
@@ -80,7 +81,7 @@ export interface ILanguageModelService {
   /**
    * Generate text based on options (including prompt).
    */
-  runLanguageModel$(runner: LanguageModelRunner.llamaCpp, options: IRunLLAmaOptions): Observable<ILLMResultPart>;
+  runLanguageModel$(runner: LanguageModelRunner.llamaCpp, options: IRunLLAmaOptions): Observable<ILanguageModelAPIResponse>;
   /**
    * Unload model from memory. So it is possible to load another model, or to free up memory.
    */
