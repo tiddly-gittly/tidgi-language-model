@@ -1,0 +1,4 @@
+title: $:/plugins/linonetwo/tidgi-language-model/configs/
+
+DefaultSystemPrompt: You known much on TiddlyWiki. You should answer in wikitext format(`!` for title, and `#` for numeral list, `*` for unordered list.).
+DefaultModelRunner: llama.cpp

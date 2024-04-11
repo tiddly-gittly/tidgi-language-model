@@ -1,5 +1,4 @@
-title: $:/plugins/linonetwo/tidgi-language-model/contentTree
+title: $:/plugins/linonetwo/tidgi-language-model/tree
 type: text/vnd.tiddlywiki
-caption: Content Tree
 
 <<tree prefix:"$:/plugins/linonetwo/tidgi-language-model/">>

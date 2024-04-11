@@ -1,0 +1,23 @@
+title: $:/plugins/linonetwo/tidgi-language-model/config
+tags: $:/tags/ControlPanel/SettingsTab
+caption: <<lingo "Name" "$:/plugins/linonetwo/tidgi-language-model/language/">>
+
+\define lingo-base() $:/plugins/linonetwo/tidgi-language-model/language/
+
+<<lingo ConfigDescription>>
+
+---
+
+!! <<lingo Configs/PluginConfigs/Caption>>
+
+;<<lingo Configs/DefaultModelRunner/Caption>>
+:<$select tiddler='$:/plugins/linonetwo/tidgi-language-model/configs/DefaultModelRunner'>
+	<option value='llama.cpp'>llama.cpp</option>
+</$select> <<lingo Configs/Configs/DefaultModelRunner/Description>>
+;<<lingo Configs/DefaultSystemPrompt/Caption>>
+:<$edit-text tiddler="$:/plugins/linonetwo/tidgi-language-model/configs/DefaultSystemPrompt" tabindex=-1 focus=false cancelPopups="yes" fileDrop=no tag="input" /> <<lingo Configs/Configs/DefaultSystemPrompt/Description>>
+
+!! <<lingo Configs/TidGiConfigs/Caption>>
+
+;<<lingo Configs/TidGiConfigs/Timeout/Caption>>
+:<<lingo Configs/TidGiConfigs/Timeout/Description>>

@@ -1,7 +1,10 @@
-title: $:/plugins/linonetwo/tidgi-language-model/readme/en-GB
-type: text/vnd.tiddlywiki
+title: $:/plugins/linonetwo/tidgi-language-model/language/en-GB/Readme
 
-Using LLaMa in TiddlyWiki.
+\define lingo-base() $:/plugins/linonetwo/tidgi-language-model/language/
+
+! <<lingo Name>>
+
+<<lingo Description>>
 
 !! Chatting in the sidebar
 

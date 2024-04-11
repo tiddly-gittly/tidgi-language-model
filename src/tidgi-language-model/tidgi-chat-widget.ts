@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { widget as Widget } from '$:/core/modules/widgets/widget.js';
 import { IChangedTiddlers, IParseTreeNode, IWidgetEvent, IWidgetInitialiseOptions } from 'tiddlywiki';
@@ -92,13 +93,12 @@ class ChatGPTWidget extends Widget {
     this.scroll = this.getAttribute('scroll')?.toLowerCase?.() === 'yes';
     this.readonly = this.getAttribute('readonly')?.toLowerCase?.() === 'yes';
 
-    this.runner = this.getAttribute('runner', LanguageModelRunner.llamaCpp) as LanguageModelRunner;
+    const DefaultModelRunner = $tw.wiki.getTiddlerText('$:/plugins/linonetwo/tidgi-language-model/configs/DefaultModelRunner')  as LanguageModelRunner | undefined;
+    this.runner = this.getAttribute('runner', DefaultModelRunner || LanguageModelRunner.llamaCpp) as LanguageModelRunner;
 
     const temperature = Number(this.getAttribute('temperature'));
     const topP = Number(this.getAttribute('topP'));
     const maxTokens = Number.parseInt(this.getAttribute('maxTokens')!, 10);
-    const presencePenalty = Number(this.getAttribute('presencePenalty'));
-    const frequencyPenalty = Number(this.getAttribute('frequencyPenalty'));
     if (Number.isSafeInteger(maxTokens) && maxTokens > 0) {
       this.runLanguageModelOptions.completionOptions.maxTokens = maxTokens;
     }
@@ -108,13 +108,16 @@ class ChatGPTWidget extends Widget {
     if (topP >= 0 && topP <= 1) {
       this.runLanguageModelOptions.completionOptions.topP = topP;
     }
+    const presencePenalty = Number(this.getAttribute('presencePenalty'));
+    const frequencyPenalty = Number(this.getAttribute('frequencyPenalty'));
     if (frequencyPenalty >= -2 && frequencyPenalty <= 2) {
-      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing, unicorn/no-useless-fallback-in-spread
+      // eslint-disable-next-line unicorn/no-useless-fallback-in-spread
       this.runLanguageModelOptions.completionOptions.repeatPenalty = { ...(this.runLanguageModelOptions.completionOptions.repeatPenalty || {}), frequencyPenalty };
     }
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing, unicorn/no-useless-fallback-in-spread
+    // eslint-disable-next-line unicorn/no-useless-fallback-in-spread
     this.runLanguageModelOptions.completionOptions.repeatPenalty = { ...(this.runLanguageModelOptions.completionOptions.repeatPenalty || {}), presencePenalty };
-    this.systemMessage = this.getAttribute('system_message', 'A chat between a user and an assistant. You are a helpful assistant.\n');
+    const DefaultSystemPrompt = $tw.wiki.getTiddlerText('$:/plugins/linonetwo/tidgi-language-model/configs/DefaultSystemPrompt');
+    this.systemMessage = this.getAttribute('systemMessage', DefaultSystemPrompt || 'A chat between a user and an assistant. You are a helpful assistant.\n');
     this.makeChildWidgets();
   }
 

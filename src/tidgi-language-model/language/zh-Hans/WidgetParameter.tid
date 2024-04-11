@@ -1,5 +1,4 @@
-title: $:/plugins/linonetwo/tidgi-language-model/readme/zh-Hans/Widget
-type: text/vnd.tiddlywiki
+title: $:/plugins/linonetwo/tidgi-language-model/language/zh-Hans/WidgetParameter
 
 还可以添加各种可选参数来定制行为：
 
@@ -8,18 +7,13 @@ type: text/vnd.tiddlywiki
 |component |微件的DOM标签类型，默认为div |
 |className |微件的类名，用于自定义样式 |
 |readonly |如果为readonly，则不会出现对话输入框，配合history参数仅做展示用 |
-|system_message |系统消息，用于AI的行为，例如"你是一个经验丰富的律师" |
+|systemMessage |系统消息，用于AI的行为，例如"你是一个经验丰富的律师" |
 
 除此之外，还支持如下 LLaMa 参数：
 
-{{$:/plugins/linonetwo/tidgi-language-model/readme/types/LLaMa}}
+[[$:/plugins/linonetwo/tidgi-language-model/docs/types/LLaMa]]
 
-
-或 RWKV 参数
-
-{{$:/plugins/linonetwo/tidgi-language-model/readme/types/Rwkv}}
-
-其具体用法可以查看[[官方文档|https://llama-node.vercel.app/docs/backends/llama.cpp/inference]]。
+其具体用法可以查看[[官方文档|https://withcatai.github.io/node-llama-cpp/api/classes/LlamaModel]]。
 
 现在还没有做多轮对话，即便是在一个微件里聊的，也都是单轮对话，多轮对话等下个版本再搞。
 

@@ -1,7 +1,10 @@
-title: $:/plugins/linonetwo/tidgi-language-model/readme/zh-Hans
-type: text/vnd.tiddlywiki
+title: $:/plugins/linonetwo/tidgi-language-model/language/zh-Hans/Readme
 
-在 TiddlyWiki 中使用 LLaMa。
+\define lingo-base() $:/plugins/linonetwo/tidgi-language-model/language/
+
+! <<lingo Name>>
+
+<<lingo Description>>
 
 !! 在侧边栏聊天
 
@@ -24,3 +27,5 @@ LLaMa 实际上是一个微件，你可以按照自己的需求定制聊天机�
 ```
 
 详细参数和用法见[[readme/zh-Hans/Widget|$:/plugins/linonetwo/tidgi-language-model/readme/zh-Hans/Widget]]。
+
+

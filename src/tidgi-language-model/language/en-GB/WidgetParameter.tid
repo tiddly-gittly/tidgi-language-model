@@ -1,5 +1,4 @@
-title: $:/plugins/linonetwo/tidgi-language-model/readme/en-GB/Widget
-type: text/vnd.tiddlywiki
+title: $:/plugins/linonetwo/tidgi-language-model/language/en-GB/WidgetParameter
 
 Various optional parameters can also be added to customize the behavior.
 
@@ -9,17 +8,13 @@ Various optional parameters can also be added to customize the behavior.
 |component |DOM tag type for microware, default is div |
 |className |Class name of the widget for custom styles |
 |readonly |If it is readonly, no dialog input box will appear, and it will be used for display only with the history parameter. |
-|system_message |System messages to customize the AI's behavior, such as "You are an experienced lawyer" |
+|systemMessage |System messages to customize the AI's behavior, such as "You are an experienced lawyer" |
 
 In addition, the following LLaMa parameters are supported:
 
-{{$:/plugins/linonetwo/tidgi-language-model/readme/types/LLaMa}}
+[[$:/plugins/linonetwo/tidgi-language-model/docs/types/LLaMa]]
 
-or RWKV parameters:
-
-{{$:/plugins/linonetwo/tidgi-language-model/readme/types/Rwkv}}
-
-Its specific usage can check the [[official documentation|https://llama-node.vercel.app/docs/backends/llama.cpp/inference]].
+Its specific usage can check the [[official documentation|https://withcatai.github.io/node-llama-cpp/api/classes/LlamaModel]].
 
 Now there is no multi-round dialogue, even in a micro-piece chat, but also a single round of dialogue, multi-round dialogue and so on the next version to engage.
 

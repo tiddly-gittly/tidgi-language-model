@@ -1,0 +1,13 @@
+title: $:/plugins/linonetwo/tidgi-language-model/language/zh-Hans/
+
+Name: 太记语言模型
+Description: 在太微中与太记（仅桌面版）内置的语言模型服务（LLama/Rwkv）聊天。一个私人的、本地的和完全解锁（root过）的 ChatGPT 人工智能。
+Configs/Description: 通过这些设置，您可以自定义「太记语言模型」插件的行为。
+Configs/PluginConfigs/Caption: 插件设置
+Configs/DefaultSystemPrompt/Caption: 默认系统提示词
+Configs/DefaultSystemPrompt/Description: 为侧边栏AI聊天和其它未配置系统提示词的AI聊天界面设置系统提示词，它将会被直接拼接在用户输入的问题前面。
+Configs/DefaultModelRunner/Caption: 默认使用的语言模型运行器
+Configs/DefaultModelRunner/Description: 不同运行器支持不同的模型。LLaMa.CPP 运行器支持大部分 GGUF 模型。
+Configs/TidGiConfigs/Caption: 太记的设置
+Configs/TidGiConfigs/Timeout/Caption: 超时时间（分钟）
+Configs/TidGiConfigs/Timeout/Description: 请到太记的「设置-语言模型-超时时长」去设置这个值。等待这么长时间之后，如果语言模型还一言不发，就中止生成，防止陷入死循环。如果语言模型经常无缘无故中止生成，可以适当增加这个值。

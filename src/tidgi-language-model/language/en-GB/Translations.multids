@@ -1,0 +1,13 @@
+title: $:/plugins/linonetwo/tidgi-language-model/language/en-GB/
+
+Name: Tidgi Language Model
+Description: Chat with TidGi (Desktop only)'s build-in language model service (LLama/Rwkv) in Tiddlywiki. A private, local and rooted ChatGPT AI.
+Configs/Description: These settings let you customise the behaviour of "Tidgi Language Model" plugin.
+Configs/PluginConfigs/Caption: Plugin Configs
+Configs/DefaultSystemPrompt/Caption: Default System Prompt
+Configs/DefaultSystemPrompt/Description: Set a system prompt word for sidebar AI chats and other AI chat interfaces that are not configured with a system prompt word, and it will be spliced directly in front of the user-entered question.
+Configs/DefaultModelRunner/Caption: Default Model Runner
+Configs/DefaultModelRunner/Description: Different models are supported by different runners. the LLaMa.CPP runner supports most of the GGUF models.
+Configs/TidGiConfigs/Caption: TidGi Configs
+Configs/TidGiConfigs/Timeout/Caption: Timeout time (minutes)
+Configs/TidGiConfigs/Timeout/Description: Please go to "Settings-Language Model-Timeout/Description" to set this value. If the language model doesn't say anything after waiting for such a long time, the generation will be aborted to prevent it from getting into a dead loop. If the language model often aborts for no reason, you can increase this value appropriately.
