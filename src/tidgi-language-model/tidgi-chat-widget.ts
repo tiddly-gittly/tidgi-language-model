@@ -1,14 +1,13 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { widget as Widget } from '$:/core/modules/widgets/widget.js';
-import { HTMLTags, IChangedTiddlers, IParseTreeNode, IWidgetEvent, IWidgetInitialiseOptions } from 'tiddlywiki';
+import { IChangedTiddlers, IParseTreeNode, IWidgetEvent, IWidgetInitialiseOptions } from 'tiddlywiki';
 import { historyManager, isChinese, renderChattingConversation, renderConversation } from './utils';
 import './style.less';
 import type { Observable } from 'rxjs';
-import { LanguageModelRunner } from './constant';
-import type { ILLMResultPart, IRunLLAmaOptions, IRunRwkvOptions, RwkvInvocation } from './type';
+import { type ILLMResultPart, type IRunLLAmaOptions, LanguageModelRunner } from './languageModel';
 
 class ChatGPTWidget extends Widget {
-  private containerNodeTag: HTMLTags = 'div';
+  private containerNodeTag: keyof HTMLElementTagNameMap = 'div';
 
   private containerNodeClass = '';
 
@@ -68,7 +67,15 @@ class ChatGPTWidget extends Widget {
 
   private readonly = false;
 
-  private runLanguageModelOptions: Partial<IRunLLAmaOptions | IRunRwkvOptions> = {};
+  private readonly runLanguageModelOptions: IRunLLAmaOptions = {
+    completionOptions: {
+      prompt: 'Say Hello to me.',
+    },
+    loadConfig: {},
+    // overwrite this id later
+    id: 'tidgi-chat-widget',
+  };
+
   private runner = LanguageModelRunner.llamaCpp;
 
   private systemMessage = '';
@@ -79,7 +86,7 @@ class ChatGPTWidget extends Widget {
   }
 
   execute() {
-    this.containerNodeTag = this.getAttribute('component', 'div') as HTMLTags;
+    this.containerNodeTag = this.getAttribute('component', 'div') as keyof HTMLElementTagNameMap;
     this.containerNodeClass = this.getAttribute('className', '');
     this.historyTiddler = this.getAttribute('history', '') || this.tmpHistoryTiddler;
     this.scroll = this.getAttribute('scroll')?.toLowerCase?.() === 'yes';
@@ -87,29 +94,26 @@ class ChatGPTWidget extends Widget {
 
     this.runner = this.getAttribute('runner', LanguageModelRunner.llamaCpp) as LanguageModelRunner;
 
-    const temperature = Number(this.getAttribute('temp'));
+    const temperature = Number(this.getAttribute('temperature'));
     const topP = Number(this.getAttribute('topP'));
-    const maxPredictLength = Number.parseInt(this.getAttribute('maxPredictLength')!, 10);
+    const maxTokens = Number.parseInt(this.getAttribute('maxTokens')!, 10);
     const presencePenalty = Number(this.getAttribute('presencePenalty'));
     const frequencyPenalty = Number(this.getAttribute('frequencyPenalty'));
-    this.runLanguageModelOptions = {
-      completionOptions: {} as unknown as RwkvInvocation,
-    };
-    if (Number.isSafeInteger(maxPredictLength) && maxPredictLength > 0) {
-      (this.runLanguageModelOptions.completionOptions as RwkvInvocation).maxPredictLength = maxPredictLength;
+    if (Number.isSafeInteger(maxTokens) && maxTokens > 0) {
+      this.runLanguageModelOptions.completionOptions.maxTokens = maxTokens;
     }
     if (temperature >= 0 && temperature <= 2) {
-      (this.runLanguageModelOptions.completionOptions as RwkvInvocation).temp = temperature;
+      this.runLanguageModelOptions.completionOptions.temperature = temperature;
     }
     if (topP >= 0 && topP <= 1) {
-      (this.runLanguageModelOptions.completionOptions as RwkvInvocation).topP = topP;
-    }
-    if (presencePenalty >= -2 && presencePenalty <= 2) {
-      (this.runLanguageModelOptions.completionOptions as RwkvInvocation).presencePenalty = presencePenalty;
+      this.runLanguageModelOptions.completionOptions.topP = topP;
     }
     if (frequencyPenalty >= -2 && frequencyPenalty <= 2) {
-      (this.runLanguageModelOptions.completionOptions as RwkvInvocation).frequencyPenalty = frequencyPenalty;
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing, unicorn/no-useless-fallback-in-spread
+      this.runLanguageModelOptions.completionOptions.repeatPenalty = { ...(this.runLanguageModelOptions.completionOptions.repeatPenalty || {}), frequencyPenalty };
     }
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing, unicorn/no-useless-fallback-in-spread
+    this.runLanguageModelOptions.completionOptions.repeatPenalty = { ...(this.runLanguageModelOptions.completionOptions.repeatPenalty || {}), presencePenalty };
     this.systemMessage = this.getAttribute('system_message', 'A chat between a user and an assistant. You are a helpful assistant.\n');
     this.makeChildWidgets();
   }
@@ -122,13 +126,13 @@ class ChatGPTWidget extends Widget {
     const conversations = $tw.utils.domMaker('div', {
       class: 'conversations',
     });
-    const container = $tw.utils.domMaker(this.containerNodeTag, {
+    const containerElement = $tw.utils.domMaker(this.containerNodeTag, {
       class: `tidgi-language-model-container ${this.containerNodeClass}`,
       children: [conversations],
     }) as HTMLDivElement;
-    nextSibling ? nextSibling.before(container) : parent.append(container);
-    this.domNodes.push(container);
-    this.chat(container, conversations);
+    parent.insertBefore(containerElement, nextSibling);
+    this.domNodes.push(containerElement);
+    this.chat(containerElement, conversations);
   }
 
   refresh(changedTiddlers: IChangedTiddlers) {
@@ -214,11 +218,7 @@ class ChatGPTWidget extends Widget {
           apiLock = true;
           chatButton.disabled = true;
           // get config from tiddlers
-          const runner = $tw.wiki.getTiddlerText(
-            '$:/plugins/linonetwo/tidgi-language-model/Config/default-runner',
-            this.runner || 'llama.cpp' as LanguageModelRunner,
-          ) as LanguageModelRunner;
-          const cpuCount = Number($tw.wiki.getTiddlerText('$:/plugins/linonetwo/tidgi-language-model/Config/cpu-count', '4')) || 4;
+          const runner = this.runner || 'llama.cpp' as LanguageModelRunner;
           const id = String(Date.now());
           /**
            * We add stream result to this answer string.
@@ -310,27 +310,10 @@ class ChatGPTWidget extends Widget {
               case LanguageModelRunner.llamaCpp: {
                 runnerResultObserver = window.observables.languageModel.runLanguageModel$(runner, {
                   completionOptions: {
-                    prompt: `CONTEXT:${attachment}\n${this.systemMessage}\nUSER:${userInputText}\nASSISTANT:`,
                     ...this.runLanguageModelOptions?.completionOptions,
-                    nThreads: cpuCount,
-                  },
-                  id,
-                });
-                break;
-              }
-              case LanguageModelRunner.llmRs: {
-                console.error('llm-rs runner Not implemented yet');
-                return;
-              }
-              case LanguageModelRunner.rwkvCpp: {
-                runnerResultObserver = window.observables.languageModel.runLanguageModel$(runner, {
-                  completionOptions: {
                     prompt: `CONTEXT:${attachment}\n${this.systemMessage}\nUSER:${userInputText}\nASSISTANT:`,
-                    ...this.runLanguageModelOptions?.completionOptions,
                   },
-                  loadConfig: {
-                    nThreads: cpuCount,
-                  },
+                  loadConfig: this.runLanguageModelOptions?.loadConfig,
                   id,
                 });
                 break;

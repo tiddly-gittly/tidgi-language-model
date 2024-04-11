@@ -34,7 +34,7 @@
     "@modern-js/tsconfig": "^2.48.4",
     "@types/node": "^20.12.7",
     "dprint": "^0.45.1",
-    "eslint-config-tidgi": "1.2.2",
+    "eslint-config-tidgi": "1.2.3",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.2",
     "node-llama-cpp": "^2.8.9",
@@ -43,7 +43,7 @@
     "rxjs": "^7.8.1",
     "ts-node": "^10.9.2",
     "tw5-typed": "^0.5.9",
-    "typescript": "^5.4.4"
+    "typescript": "^5.4.5"
   },
   "dependencies": {
     "npm-check-updates": "^16.14.18",

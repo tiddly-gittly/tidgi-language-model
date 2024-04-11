@@ -1,13 +1,14 @@
-import type { Generate as LLamaInvocation } from '@llama-node/llama-cpp';
-import type { RwkvInvocation } from '@llama-node/rwkv-cpp';
-import type { LoadConfig as LLamaLoadConfig } from 'llama-node/dist/llm/llama-cpp';
-import type { LoadConfig as RwkvLoadConfig } from 'llama-node/dist/llm/rwkv-cpp';
+/**
+ * File copy from TidGi-Desktop's src/services/languageModel/interface.ts
+ * And only import type here.
+ * 
+ * - And remove ` & Pick<LlamaModelOptions, 'modelPath'>`
+ */
+import type { LLamaChatPromptOptions, LlamaModelOptions } from 'node-llama-cpp';
 import type { Observable } from 'rxjs';
 
 export enum LanguageModelRunner {
   llamaCpp = 'llama.cpp',
-  llmRs = 'llm-rs',
-  rwkvCpp = 'rwkv.cpp',
 }
 export interface ILanguageModelPreferences {
   /**
@@ -15,9 +16,7 @@ export interface ILanguageModelPreferences {
    * @url https://github.com/Atome-FE/llama-node#supported-models
    */
   defaultModel: {
-    [LanguageModelRunner.llmRs]: string;
     [LanguageModelRunner.llamaCpp]: string;
-    [LanguageModelRunner.rwkvCpp]: string;
   };
   /**
    * If a llm stop responding for this long, we will kill the conversation. This basically means it stopped responding.
@@ -33,18 +32,19 @@ export interface ILLMResultBase {
    */
   id: string;
 }
-export type ILanguageModelWorkerResponse = INormalLanguageModelLogMessage | IErrorLanguageModelLogMessage | ILanguageModelWorkerResult;
+export type ILanguageModelWorkerResponse = INormalLanguageModelLogMessage | ILanguageModelWorkerResult | ILanguageModelLoadProgress;
 export interface INormalLanguageModelLogMessage extends ILLMResultBase {
+  /** for error, use `observer.error` instead */
   level: 'debug' | 'warn' | 'info';
   message: string;
   meta: unknown;
 }
-export interface IErrorLanguageModelLogMessage extends ILLMResultBase {
-  error: Error;
-  level: 'error';
-}
 export interface ILanguageModelWorkerResult extends ILLMResultPart {
   type: 'result';
+}
+export interface ILanguageModelLoadProgress extends ILLMResultBase {
+  percentage: number;
+  type: 'progress';
 }
 
 /**
@@ -55,13 +55,8 @@ export interface ILLMResultPart extends ILLMResultBase {
 }
 
 export interface IRunLLAmaOptions extends ILLMResultBase {
-  completionOptions: Partial<LLamaInvocation> & { prompt: string };
-  loadConfig?: Partial<LLamaLoadConfig>;
-  modelName?: string;
-}
-export interface IRunRwkvOptions extends ILLMResultBase {
-  completionOptions: Partial<RwkvInvocation> & { prompt: string };
-  loadConfig?: Partial<RwkvLoadConfig>;
+  completionOptions: Partial<LLamaChatPromptOptions> & { prompt: string };
+  loadConfig: Partial<LlamaModelOptions>;
   modelName?: string;
 }
 
@@ -78,25 +73,4 @@ export interface IRunRwkvOptions extends ILLMResultBase {
 export interface ILanguageModelService {
   abortLanguageModel(runner: LanguageModelRunner, id: string): Promise<void>;
   runLanguageModel$(runner: LanguageModelRunner.llamaCpp, options: IRunLLAmaOptions): Observable<ILLMResultPart>;
-  runLanguageModel$(runner: LanguageModelRunner.rwkvCpp, options: IRunRwkvOptions): Observable<ILLMResultPart>;
-}
-
-export type { Generate as LLamaInvocation } from '@llama-node/llama-cpp';
-export type { RwkvInvocation } from '@llama-node/rwkv-cpp';
-
-declare global {
-  interface Window {
-    observables: {
-      /**
-       * Test language model on renderer by:
-       * ```js
-       * window.observables.languageModel.runLLama$({ prompt: 'A chat between a user and an assistant.\nUSER: You are a helpful assistant. Write a simple hello world in JS.\nASSISTANT:\n', id: '1' }).subscribe({ next: console.log, error: console.error, complete: () => console.warn('completed') })
-       * ```
-       */
-      languageModel: ILanguageModelService;
-    };
-    service: {
-      languageModel: ILanguageModelService;
-    };
-  }
 }
