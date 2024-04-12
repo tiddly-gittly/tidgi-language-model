@@ -2,7 +2,6 @@
  * File copy from TidGi-Desktop's src/services/languageModel/interface.ts
  * And only import type here.
  * 
- * - And remove ` & Pick<LlamaModelOptions, 'modelPath'>`
  * - delete LanguageModelServiceIPCDescriptor and some related imports
  */
 import { LLamaChatPromptOptions, LlamaModelOptions } from 'node-llama-cpp';
@@ -60,7 +59,11 @@ export interface ILLMResultPart extends ILLMResultBase {
 export interface IRunLLAmaOptions extends ILLMResultBase {
   completionOptions: Partial<LLamaChatPromptOptions> & { prompt: string };
   loadConfig: Partial<LlamaModelOptions>;
-  modelName?: string;
+  /**
+   * Load model to test if it's loadable, or preload model to speed up (when `autoDisposeSequence: false,`).
+   * Without generating text.
+   */
+  loadModelOnly?: boolean;
 }
 
 /**
@@ -78,6 +81,8 @@ export interface ILanguageModelService {
    * Abort a chat response generation.
    */
   abortLanguageModel(runner: LanguageModelRunner, id: string): Promise<void>;
+  modelLoadProgress$: Observable<Record<LanguageModelRunner, number>>;
+  modelLoaded$: Observable<Record<LanguageModelRunner, boolean>>;
   /**
    * Generate text based on options (including prompt).
    */

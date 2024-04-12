@@ -164,7 +164,7 @@ export const renderChattingConversation = (parameters: {
     },
   });
   const progressBox = $tw.utils.domMaker('div', {
-    text: zh ? '模型加载中' : 'Modal Loading',
+    text: zh ? '模型加载中' : 'Model Loading',
     style: {
       display: 'none',
       background: 'transparent',
