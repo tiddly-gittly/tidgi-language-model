@@ -80,6 +80,7 @@ class ChatGPTWidget extends Widget {
   private runner = LanguageModelRunner.llamaCpp;
 
   private systemMessage = '';
+  private promptTemplate = '';
 
   initialise(parseTreeNode: IParseTreeNode, options: IWidgetInitialiseOptions) {
     super.initialise(parseTreeNode, options);
@@ -122,6 +123,11 @@ class ChatGPTWidget extends Widget {
       $tw.wiki.getTiddlerText('$:/plugins/linonetwo/tidgi-language-model/language/en-GB/DefaultSystemPrompt'),
     );
     this.systemMessage = this.getAttribute('systemMessage', DefaultSystemPrompt || 'A chat between a user and an assistant. You are a helpful assistant.\n');
+    const DefaultPromptTemplate = $tw.wiki.getTiddlerText(
+      `$:/plugins/linonetwo/tidgi-language-model/language/${currentLanguage}/DefaultPromptTemplate`,
+      $tw.wiki.getTiddlerText('$:/plugins/linonetwo/tidgi-language-model/language/en-GB/DefaultPromptTemplate'),
+    );
+    this.promptTemplate = this.getAttribute('promptTemplate', DefaultPromptTemplate || '<<systemMessage>> USER: <<userInputText>> ASSISTANT:');
     this.makeChildWidgets();
   }
 
@@ -299,6 +305,22 @@ class ChatGPTWidget extends Widget {
             cancelButtonText: this.cancelButtonText,
           });
           conversations.prepend(conversation);
+          /**
+           * test this with
+           *
+           * ```js
+           * $tw.wiki.renderText('text/plain-formatted', 'text/vnd.tiddlywiki', $tw.wiki.getTiddlerText('$:/plugins/linonetwo/tidgi-language-model/language/zh-Hans/DefaultPromptTemplate'), { variables: { systemMessage: $tw.wiki.getTiddlerText('$:/plugins/linonetwo/tidgi-language-model/language/zh-Hans/DefaultSystemPrompt'), userInputText: 'Hi', attachment: '' } })
+           * ```
+           */
+          const prompt = $tw.wiki.renderText('text/plain-formatted', 'text/vnd.tiddlywiki', this.promptTemplate, {
+            variables: {
+              systemMessage: this.systemMessage,
+              userInputText,
+              attachment,
+            },
+          });
+          // DEBUG: console prompt
+          console.log(`prompt`, prompt);
 
           // if no tidgi service, not actually calling api
           if (window?.observables?.languageModel?.runLanguageModel$ === undefined) return;
@@ -318,7 +340,7 @@ class ChatGPTWidget extends Widget {
                 runnerResultObserver = window.observables.languageModel.runLanguageModel$(runner, {
                   completionOptions: {
                     ...this.runLanguageModelOptions?.completionOptions,
-                    prompt: `CONTEXT:${attachment}\n${this.systemMessage}\nUSER:${userInputText}\nASSISTANT:`,
+                    prompt,
                   },
                   loadConfig: this.runLanguageModelOptions?.loadConfig,
                   id,

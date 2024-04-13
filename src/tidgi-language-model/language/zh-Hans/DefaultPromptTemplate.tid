@@ -1,0 +1,10 @@
+title: $:/plugins/linonetwo/tidgi-language-model/language/zh-Hans/DefaultPromptTemplate
+
+CONTEXT:
+<<attachment>>
+
+SYSTEM:
+<<systemMessage>>
+
+USER: <<userInputText>>
+ASSISTANT:

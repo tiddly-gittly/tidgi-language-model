@@ -21,6 +21,12 @@ caption: <<lingo "Name" "$:/plugins/linonetwo/tidgi-language-model/language/">>
 
 <<lingo Configs/Configs/DefaultSystemPrompt/Description>>
 
+!! <<lingo Configs/DefaultPromptTemplate/Caption>>
+
+<<lingo Configs/DefaultPromptTemplate/Editor>>
+
+<<lingo Configs/Configs/DefaultPromptTemplate/Description>>
+
 !! <<lingo Configs/TidGiConfigs/Caption>>
 
 ;<<lingo Configs/TidGiConfigs/Timeout/Caption>>

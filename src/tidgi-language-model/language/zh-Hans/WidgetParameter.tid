@@ -1,5 +1,7 @@
 title: $:/plugins/linonetwo/tidgi-language-model/language/zh-Hans/WidgetParameter
 
+\define lingo-base() $:/plugins/linonetwo/tidgi-language-model/language/
+
 还可以添加各种可选参数来定制行为：
 
 |!参数 |!解释 |
@@ -8,6 +10,7 @@ title: $:/plugins/linonetwo/tidgi-language-model/language/zh-Hans/WidgetParamete
 |className |微件的类名，用于自定义样式 |
 |readonly |如果为readonly，则不会出现对话输入框，配合history参数仅做展示用 |
 |systemMessage |系统消息，用于AI的行为，例如"你是一个经验丰富的律师" |
+|promptTemplate | <<lingo Configs/DefaultPromptTemplate/Description>> |
 
 除此之外，还支持如下 LLaMa 参数：
 
