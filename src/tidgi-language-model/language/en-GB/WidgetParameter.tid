@@ -10,7 +10,7 @@ Various optional parameters can also be added to customize the behavior.
 |component |DOM tag type for microware, default is div |
 |className |Class name of the widget for custom styles |
 |readonly |If it is readonly, no dialog input box will appear, and it will be used for display only with the history parameter. |
-|systemMessage |System messages to customize the AI's behavior, such as "You are an experienced lawyer" |
+|systemPrompt |System messages to customize the AI's behavior, such as "You are an experienced lawyer" |
 |promptTemplate | <<lingo Configs/DefaultPromptTemplate/Description>> |
 
 In addition, the following LLaMa parameters are supported:

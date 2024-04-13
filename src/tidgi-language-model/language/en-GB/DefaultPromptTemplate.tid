@@ -1,10 +1,7 @@
 title: $:/plugins/linonetwo/tidgi-language-model/language/en-GB/DefaultPromptTemplate
 
-CONTEXT:
+<<userInputText>>
+
+<% if [<attachment>] %>
 <<attachment>>
-
-SYSTEM:
-<<systemMessage>>
-
-USER: <<userInputText>>
-ASSISTANT:
+<% endif %>

@@ -8,8 +8,10 @@ Configs/DefaultSystemPrompt/Caption: 默认系统提示词
 Configs/DefaultSystemPrompt/Description: 为侧边栏AI聊天和其它未配置系统提示词的AI聊天界面设置系统提示词，它将会被直接拼接在用户输入的问题前面。
 Configs/DefaultSystemPrompt/Editor: <$edit-text tiddler="$:/plugins/linonetwo/tidgi-language-model/language/zh-Hans/DefaultSystemPrompt" tabindex=-1 focus=false cancelPopups="yes" fileDrop=no tag="textarea" class="default-system-prompt-editor" />
 Configs/DefaultPromptTemplate/Caption: 默认提示词模板
-Configs/DefaultPromptTemplate/Description: 组合系统提示词和用户输入，并拼上上下文的模板。各部分将以维基文本变量的形式提供。
+Configs/DefaultPromptTemplate/Description: 组合用户输入和自定义上下文的模板。各部分将以维基文本变量的形式提供。
 Configs/DefaultPromptTemplate/Editor: <$edit-text tiddler="$:/plugins/linonetwo/tidgi-language-model/language/zh-Hans/DefaultPromptTemplate" tabindex=-1 focus=false cancelPopups="yes" fileDrop=no tag="textarea" class="default-system-prompt-editor" />
+Configs/DefaultSystemTemplate/Caption: 默认系统模板
+Configs/DefaultSystemTemplate/Description: 组合系统提示词和用户输入，条目的内容需要为 JinJa 格式。带有 `$:/tags/AI/SystemTemplate` 标题的条目会出现在这个下拉列表里。选择适合当前所用模型的系统模板以获得最佳生成效果。
 Configs/DefaultModelRunner/Caption: 默认使用的语言模型运行器
 Configs/DefaultModelRunner/Description: 不同运行器支持不同的模型。LLaMa.CPP 运行器支持大部分 GGUF 模型。
 Configs/TidGiConfigs/Caption: 太记的设置

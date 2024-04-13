@@ -8,8 +8,10 @@ Configs/DefaultSystemPrompt/Caption: Default System Prompt
 Configs/DefaultSystemPrompt/Description: Set a system prompt word for sidebar AI chats and other AI chat interfaces that are not configured with a system prompt word, and it will be spliced directly in front of the user-entered question.
 Configs/DefaultSystemPrompt/Editor: <$edit-text tiddler="$:/plugins/linonetwo/tidgi-language-model/language/en-GB/DefaultSystemPrompt" tabindex=-1 focus=false cancelPopups="yes" fileDrop=no tag="textarea" class="default-system-prompt-editor" />
 Configs/DefaultPromptTemplate/Caption: Default Prompt Template
-Configs/DefaultPromptTemplate/Description: A template that combines system prompt and user input words and the context. Sections will be provided as wikitext variables.
+Configs/DefaultPromptTemplate/Description: A template that combines user input and custom context. Sections will be provided as wikitext variables.
 Configs/DefaultPromptTemplate/Editor: <$edit-text tiddler="$:/plugins/linonetwo/tidgi-language-model/language/en-GB/DefaultPromptTemplate" tabindex=-1 focus=false cancelPopups="yes" fileDrop=no tag="textarea" class="default-system-prompt-editor" />
+Configs/DefaultSystemTemplate/Caption: Default System Template
+Configs/DefaultSystemTemplate/Description: Combining system prompt words and user input, tiddlers need to be in JinJa format. Tiddlers with the `$:/tags/AI/SystemTemplate` heading will appear in this drop-down list. Select the system template that fits the currently used model for optimal generation.
 Configs/DefaultModelRunner/Caption: Default Model Runner
 Configs/DefaultModelRunner/Description: Different models are supported by different runners. the LLaMa.CPP runner supports most of the GGUF models.
 Configs/TidGiConfigs/Caption: TidGi Configs

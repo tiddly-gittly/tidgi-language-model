@@ -14,6 +14,12 @@ caption: <<lingo "Name" "$:/plugins/linonetwo/tidgi-language-model/language/">>
 :<$select tiddler='$:/plugins/linonetwo/tidgi-language-model/configs/DefaultModelRunner'>
 	<option value='llama.cpp'>llama.cpp</option>
 </$select> <<lingo Configs/Configs/DefaultModelRunner/Description>>
+;<<lingo Configs/DefaultSystemTemplate/Caption>>
+:<$select tiddler='$:/plugins/linonetwo/tidgi-language-model/configs/DefaultSystemTemplate'>
+	<$list filter="[all[shadows+tiddlers]tag[$:/tags/AI/SystemTemplate]]">
+		<option value=<<currentTiddler>>>{{!!caption}}</option>
+	</$list>
+</$select> <<lingo Configs/DefaultSystemTemplate/Description>>
 
 !! <<lingo Configs/DefaultSystemPrompt/Caption>>
 
@@ -25,7 +31,7 @@ caption: <<lingo "Name" "$:/plugins/linonetwo/tidgi-language-model/language/">>
 
 <<lingo Configs/DefaultPromptTemplate/Editor>>
 
-<<lingo Configs/Configs/DefaultPromptTemplate/Description>>
+<<lingo Configs/DefaultPromptTemplate/Description>>
 
 !! <<lingo Configs/TidGiConfigs/Caption>>
 

@@ -4,7 +4,7 @@
  * 
  * - delete LanguageModelServiceIPCDescriptor and some related imports
  */
-import type { LLamaChatPromptOptions, LlamaModelOptions } from 'node-llama-cpp';
+import type { LLamaChatPromptOptions, LlamaChatSessionOptions, LlamaModelOptions, JinjaTemplateChatWrapperOptions } from 'node-llama-cpp';
 import type { Observable } from 'rxjs';
 
 export enum LanguageModelRunner {
@@ -64,6 +64,8 @@ export interface IRunLLAmaOptions extends ILLMResultBase {
    * Without generating text.
    */
   loadModelOnly?: boolean;
+  sessionOptions?: Pick<LlamaChatSessionOptions, 'systemPrompt'>;
+  templates?: Partial<Pick<JinjaTemplateChatWrapperOptions, 'template' | 'systemRoleName'>>;
 }
 
 /**

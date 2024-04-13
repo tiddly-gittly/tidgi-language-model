@@ -79,8 +79,9 @@ class ChatGPTWidget extends Widget {
 
   private runner = LanguageModelRunner.llamaCpp;
 
-  private systemMessage = '';
+  private systemPrompt = '';
   private promptTemplate = '';
+  private systemTemplate: string | undefined;
 
   initialise(parseTreeNode: IParseTreeNode, options: IWidgetInitialiseOptions) {
     super.initialise(parseTreeNode, options);
@@ -122,12 +123,15 @@ class ChatGPTWidget extends Widget {
       `$:/plugins/linonetwo/tidgi-language-model/language/${currentLanguage}/DefaultSystemPrompt`,
       $tw.wiki.getTiddlerText('$:/plugins/linonetwo/tidgi-language-model/language/en-GB/DefaultSystemPrompt'),
     );
-    this.systemMessage = this.getAttribute('systemMessage', DefaultSystemPrompt || 'A chat between a user and an assistant. You are a helpful assistant.\n');
+    this.systemPrompt = this.getAttribute('systemPrompt', DefaultSystemPrompt || 'A chat between a user and an assistant. You are a helpful assistant.\n');
     const DefaultPromptTemplate = $tw.wiki.getTiddlerText(
       `$:/plugins/linonetwo/tidgi-language-model/language/${currentLanguage}/DefaultPromptTemplate`,
       $tw.wiki.getTiddlerText('$:/plugins/linonetwo/tidgi-language-model/language/en-GB/DefaultPromptTemplate'),
     );
-    this.promptTemplate = this.getAttribute('promptTemplate', DefaultPromptTemplate || '<<systemMessage>> USER: <<userInputText>> ASSISTANT:');
+    this.promptTemplate = this.getAttribute('promptTemplate', DefaultPromptTemplate || '<<systemPrompt>> USER: <<userInputText>> ASSISTANT:');
+    const DefaultSystemTemplateTitle = $tw.wiki.getTiddlerText(`$:/plugins/linonetwo/tidgi-language-model/configs/DefaultSystemTemplate`);
+    const DefaultSystemTemplate = DefaultSystemTemplateTitle ? $tw.wiki.getTiddlerText(DefaultSystemTemplateTitle) : undefined;
+    this.systemTemplate = this.getAttribute('systemTemplate') || DefaultSystemTemplate;
     this.makeChildWidgets();
   }
 
@@ -309,18 +313,15 @@ class ChatGPTWidget extends Widget {
            * test this with
            *
            * ```js
-           * $tw.wiki.renderText('text/plain-formatted', 'text/vnd.tiddlywiki', $tw.wiki.getTiddlerText('$:/plugins/linonetwo/tidgi-language-model/language/zh-Hans/DefaultPromptTemplate'), { variables: { systemMessage: $tw.wiki.getTiddlerText('$:/plugins/linonetwo/tidgi-language-model/language/zh-Hans/DefaultSystemPrompt'), userInputText: 'Hi', attachment: '' } })
+           * $tw.wiki.renderText('text/plain-formatted', 'text/vnd.tiddlywiki', $tw.wiki.getTiddlerText('$:/plugins/linonetwo/tidgi-language-model/language/zh-Hans/DefaultPromptTemplate'), { variables: { systemPrompt: $tw.wiki.getTiddlerText('$:/plugins/linonetwo/tidgi-language-model/language/zh-Hans/DefaultSystemPrompt'), userInputText: 'Hi', attachment: '' } })
            * ```
            */
           const prompt = $tw.wiki.renderText('text/plain-formatted', 'text/vnd.tiddlywiki', this.promptTemplate, {
             variables: {
-              systemMessage: this.systemMessage,
               userInputText,
               attachment,
             },
           });
-          // DEBUG: console prompt
-          console.log(`prompt`, prompt);
 
           // if no tidgi service, not actually calling api
           if (window?.observables?.languageModel?.runLanguageModel$ === undefined) return;
@@ -341,6 +342,12 @@ class ChatGPTWidget extends Widget {
                   completionOptions: {
                     ...this.runLanguageModelOptions?.completionOptions,
                     prompt,
+                  },
+                  sessionOptions: {
+                    systemPrompt: this.systemPrompt,
+                  },
+                  templates: {
+                    template: this.systemTemplate,
                   },
                   loadConfig: this.runLanguageModelOptions?.loadConfig,
                   id,
