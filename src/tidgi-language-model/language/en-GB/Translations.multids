@@ -11,3 +11,4 @@ Configs/DefaultModelRunner/Description: Different models are supported by differ
 Configs/TidGiConfigs/Caption: TidGi Configs
 Configs/TidGiConfigs/Timeout/Caption: Timeout time (minutes)
 Configs/TidGiConfigs/Timeout/Description: Please go to "Settings-Language Model-Timeout/Description" to set this value. If the language model doesn't say anything after waiting for such a long time, the generation will be aborted to prevent it from getting into a dead loop. If the language model often aborts for no reason, you can increase this value appropriately.
+Configs/DefaultSystemPrompt/Editor: <$edit-text tiddler="$:/plugins/linonetwo/tidgi-language-model/language/en-GB/DefaultSystemPrompt" tabindex=-1 focus=false cancelPopups="yes" fileDrop=no tag="textarea" class="default-system-prompt-editor" />

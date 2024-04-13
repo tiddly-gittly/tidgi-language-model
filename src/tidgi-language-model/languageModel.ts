@@ -4,7 +4,7 @@
  * 
  * - delete LanguageModelServiceIPCDescriptor and some related imports
  */
-import { LLamaChatPromptOptions, LlamaModelOptions } from 'node-llama-cpp';
+import type { LLamaChatPromptOptions, LlamaModelOptions } from 'node-llama-cpp';
 import type { Observable } from 'rxjs';
 
 export enum LanguageModelRunner {
@@ -82,7 +82,10 @@ export interface ILanguageModelService {
    */
   abortLanguageModel(runner: LanguageModelRunner, id: string): Promise<void>;
   modelLoadProgress$: Observable<Record<LanguageModelRunner, number>>;
-  modelLoaded$: Observable<Record<LanguageModelRunner, boolean>>;
+  /**
+   * Null means started loading, but not finished yet.
+   */
+  modelLoaded$: Observable<Record<LanguageModelRunner, boolean | null>>;
   /**
    * Generate text based on options (including prompt).
    */

@@ -11,3 +11,4 @@ Configs/DefaultModelRunner/Description: 不同运行器支持不同的模型。L
 Configs/TidGiConfigs/Caption: 太记的设置
 Configs/TidGiConfigs/Timeout/Caption: 超时时间（分钟）
 Configs/TidGiConfigs/Timeout/Description: 请到太记的「设置-语言模型-超时时长」去设置这个值。等待这么长时间之后，如果语言模型还一言不发，就中止生成，防止陷入死循环。如果语言模型经常无缘无故中止生成，可以适当增加这个值。
+Configs/DefaultSystemPrompt/Editor: <$edit-text tiddler="$:/plugins/linonetwo/tidgi-language-model/language/zh-Hans/DefaultSystemPrompt" tabindex=-1 focus=false cancelPopups="yes" fileDrop=no tag="textarea" class="default-system-prompt-editor" />

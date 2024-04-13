@@ -116,7 +116,11 @@ class ChatGPTWidget extends Widget {
     }
     // eslint-disable-next-line unicorn/no-useless-fallback-in-spread
     this.runLanguageModelOptions.completionOptions.repeatPenalty = { ...(this.runLanguageModelOptions.completionOptions.repeatPenalty || {}), presencePenalty };
-    const DefaultSystemPrompt = $tw.wiki.getTiddlerText('$:/plugins/linonetwo/tidgi-language-model/configs/DefaultSystemPrompt');
+    const [currentLanguage] = $tw.wiki.filterTiddlers('[[$:/language]get[text]get[name]else[en-GB]]');
+    const DefaultSystemPrompt = $tw.wiki.getTiddlerText(
+      `$:/plugins/linonetwo/tidgi-language-model/language/${currentLanguage}/DefaultSystemPrompt`,
+      $tw.wiki.getTiddlerText('$:/plugins/linonetwo/tidgi-language-model/language/en-GB/DefaultSystemPrompt'),
+    );
     this.systemMessage = this.getAttribute('systemMessage', DefaultSystemPrompt || 'A chat between a user and an assistant. You are a helpful assistant.\n');
     this.makeChildWidgets();
   }

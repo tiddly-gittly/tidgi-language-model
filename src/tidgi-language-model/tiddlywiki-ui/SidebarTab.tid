@@ -3,4 +3,4 @@ type: text/vnd.tiddlywiki
 tags: $:/tags/SideBar
 caption: <<lingo Name $:/plugins/linonetwo/tidgi-language-model/language/>>
 
-<$tidgi-chat history="$:/state/plugins/linonetwo/tidgi-language-model/side-bar-history" scroll="yes" temperature="1" systemMessage="You known much on TiddlyWiki. You should answer in wikitext format(`!` for title, and `#` for numeral list, `*` for unordered list.)." />
+<$tidgi-chat history="$:/state/plugins/linonetwo/tidgi-language-model/side-bar-history" scroll="yes" temperature="0.5" />
