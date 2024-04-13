@@ -5,6 +5,6 @@
   "description": "Chat with TidGi's build-in language model service (LLama/Rwkv) in Tiddlywiki. A private, local and rooted ChatGPT AI.",
   "plugin-type": "plugin",
   "dependents": [],
-  "version": "0.3.0",
+  "version": "0.3.1",
   "list": "readme config tree"
 }
