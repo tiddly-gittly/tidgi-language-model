@@ -47,6 +47,9 @@
     "tw5-typed": "^0.5.9",
     "typescript": "^5.4.5"
   },
+  "optionalDependencies": {
+    "node-llama-cpp": "3.0.0-beta.15"
+  },
   "dependencies": {
     "npm-check-updates": "^16.14.18",
     "tiddlywiki": "^5.3.3",
