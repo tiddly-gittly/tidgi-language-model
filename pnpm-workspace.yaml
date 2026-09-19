@@ -16,3 +16,7 @@ onlyBuiltDependencies:
   - dprint
   - esbuild
   - svelte-preprocess
+
+minimumReleaseAgeExclude:
+  - '@memeloop/react-ui@0.2.4'
+  - memeloop@0.3.4

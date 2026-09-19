@@ -2,13 +2,21 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-const directory = resolve(process.cwd(), 'src/memeloop-agent-ui');
+const directory = resolve(process.cwd(), 'src/tidgi-language-model');
 const read = (name: string) => readFileSync(resolve(directory, name), 'utf8');
 
-describe('MemeLoop TiddlyWiki plugin integration contract', () => {
+describe('TidGi Language Model MemeLoop integration contract', () => {
+  it('upgrades the existing plugin identity in place', () => {
+    const manifest = JSON.parse(read('plugin.info')) as Record<string, unknown>;
+    expect(manifest.title).toBe('$:/plugins/linonetwo/tidgi-language-model');
+    expect(manifest.version).toBe('0.4.0');
+    expect(manifest.list).toBe('readme SidebarTab');
+    expect(read('tiddlywiki-ui/SidebarTab.tid')).toContain('title: $:/plugins/linonetwo/tidgi-language-model/SidebarTab');
+  });
+
   it('mounts the same shared widget in the full view and narrow sidebar tab', () => {
     expect(read('chat-view.tid')).toContain('<$memeloopAgentChat mode="full" />');
-    expect(read('sidebar-tab.tid')).toContain('<$memeloopAgentChat mode="sidebar" />');
+    expect(read('tiddlywiki-ui/SidebarTab.tid')).toContain('<$memeloopAgentChat mode="sidebar" />');
     const widget = read('components.tsx');
     const boundChat = read('boundChat.tsx');
     const selectors = read('selectors.tsx');

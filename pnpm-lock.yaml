@@ -24,8 +24,8 @@ importers:
         specifier: 11.14.1
         version: 11.14.1(@emotion/react@11.14.0(@types/react@18.3.31)(react@18.3.1))(@types/react@18.3.31)(react@18.3.1)
       '@memeloop/react-ui':
-        specifier: ^0.2.2
-        version: 0.2.3(33df69e92906651ac218c3c5809f8bb9)
+        specifier: ^0.2.4
+        version: 0.2.4(7b719cf959296d2ce870c85f2123eacd)
       '@mui/icons-material':
         specifier: ^9.2.0
         version: 9.4.0(@mui/material@9.4.0(@emotion/react@11.14.0(@types/react@18.3.31)(react@18.3.1))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@18.3.31)(react@18.3.1))(@types/react@18.3.31)(react@18.3.1))(@types/react@18.3.31)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@types/react@18.3.31)(react@18.3.1)
@@ -51,8 +51,8 @@ importers:
         specifier: 2.0.1
         version: 2.0.1(@babel/template@7.29.7)(@emotion/react@11.14.0(@types/react@18.3.31)(react@18.3.1))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@18.3.31)(react@18.3.1))(@types/react@18.3.31)(react@18.3.1))(@types/react@18.3.31)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       memeloop:
-        specifier: ^0.3.1
-        version: 0.3.3
+        specifier: ^0.3.4
+        version: 0.3.4
       npm-check-updates:
         specifier: ^20.0.1
         version: 20.0.1
@@ -913,8 +913,8 @@ packages:
   '@kwsites/promise-deferred@1.1.1':
     resolution: {integrity: sha512-GaHYm+c0O9MjZRu0ongGBRbinu8gVAMd2UZjji6jVmqKtZluZnptXGWhz1E8j8D2HJ3f/yMxKAUC0b+57wncIw==}
 
-  '@memeloop/react-ui@0.2.3':
-    resolution: {integrity: sha512-yVyLoiT3nh7IxMw4Ua8SDxgcHLOIaDrMlHGMI2KLsKn850iFyHIG6wkM3bH2sc3CACDjR5I5Y4jh4OLgIEgSqw==}
+  '@memeloop/react-ui@0.2.4':
+    resolution: {integrity: sha512-f0yrjNk2H21e6REcLntckTAsnHeROROTpFMDXd/ciIU/uFnbnMcG60U4wmeT+oZxHsJpUXCpUfpbm3h1EiFBCg==}
     peerDependencies:
       '@assistant-ui/react': ^0.15.16
       '@emotion/react': '>=11.0.0 <12.0.0'
@@ -4220,8 +4220,8 @@ packages:
   mdn-data@2.27.1:
     resolution: {integrity: sha512-9Yubnt3e8A0OKwxYSXyhLymGW4sCufcLG6VdiDdUGVkPhpqLxlvP5vl1983gQjJl3tqbrM731mjaZaP68AgosQ==}
 
-  memeloop@0.3.3:
-    resolution: {integrity: sha512-27mHwyuXPLtNMTXWEg0CRraf+6cRslmhvy43NdJsdNEh26ZyyaZF7Tnjbj7a9HicaZ+riQcMJ3hc73iiOeUsaw==}
+  memeloop@0.3.4:
+    resolution: {integrity: sha512-yFKtOHC0uY4OeMHHGJbCpcwE/FonBqx9CTLV3IyE6dmmldV69r6wfMFniJTypVxuiLkCSyC9oK5eiKYVfoYy8g==}
     peerDependencies:
       '@ai-sdk/anthropic': ^4.0.19
       '@ai-sdk/azure': ^4.0.0
@@ -5467,9 +5467,6 @@ packages:
   zimmerframe@1.1.4:
     resolution: {integrity: sha512-B58NGBEoc8Y9MWWCQGl/gq9xBCe4IiKM0a2x7GZdQKOW5Exr8S1W24J6OgM1njK8xCRGvAJIL/MxXHf6SkmQKQ==}
 
-  zod@4.3.6:
-    resolution: {integrity: sha512-rftlrkhHZOcjDwkGlnUtZZkvaPHCsDATp4pGpuOOMDaTdDDXF91wuVDJoWoPsKX/3YPQ5fHuF3STjcYyKr+Qhg==}
-
   zod@4.6.5:
     resolution: {integrity: sha512-v5l/aFXZQeai4awLbOpSoHecE9UiMrnfx75tEXLjNonXVARxQ5mOeipTjROUchszUNCqnE+hqAMujRsRHsut2Q==}
 
@@ -6189,14 +6186,14 @@ snapshots:
 
   '@kwsites/promise-deferred@1.1.1': {}
 
-  '@memeloop/react-ui@0.2.3(33df69e92906651ac218c3c5809f8bb9)':
+  '@memeloop/react-ui@0.2.4(7b719cf959296d2ce870c85f2123eacd)':
     dependencies:
       '@assistant-ui/react': 0.15.16(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@emotion/react': 11.14.0(@types/react@18.3.31)(react@18.3.1)
       '@emotion/styled': 11.14.1(@emotion/react@11.14.0(@types/react@18.3.31)(react@18.3.1))(@types/react@18.3.31)(react@18.3.1)
       '@mui/icons-material': 9.4.0(@mui/material@9.4.0(@emotion/react@11.14.0(@types/react@18.3.31)(react@18.3.1))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@18.3.31)(react@18.3.1))(@types/react@18.3.31)(react@18.3.1))(@types/react@18.3.31)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@types/react@18.3.31)(react@18.3.1)
       '@mui/material': 9.4.0(@emotion/react@11.14.0(@types/react@18.3.31)(react@18.3.1))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@18.3.31)(react@18.3.1))(@types/react@18.3.31)(react@18.3.1))(@types/react@18.3.31)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      memeloop: 0.3.3
+      memeloop: 0.3.4
       react: 18.3.1
     optionalDependencies:
       '@rjsf/core': 6.7.0(@rjsf/utils@6.7.0(react@18.3.1))(react@18.3.1)
@@ -8406,7 +8403,7 @@ snapshots:
       browserslist: 4.28.2
       debug: 4.4.3
       esbuild: 0.28.0
-      zod: 4.3.6
+      zod: 4.6.5
     transitivePeerDependencies:
       - supports-color
 
@@ -9588,7 +9585,7 @@ snapshots:
 
   mdn-data@2.27.1: {}
 
-  memeloop@0.3.3:
+  memeloop@0.3.4:
     dependencies:
       '@types/json-schema': 7.0.15
       acorn: 8.16.0
@@ -10926,8 +10923,6 @@ snapshots:
   yocto-queue@0.1.0: {}
 
   zimmerframe@1.1.4: {}
-
-  zod@4.3.6: {}
 
   zod@4.6.5: {}
 

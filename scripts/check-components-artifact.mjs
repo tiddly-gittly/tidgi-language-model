@@ -4,15 +4,15 @@ import { createRequire } from 'node:module';
 import { resolve } from 'node:path';
 import { runInNewContext } from 'node:vm';
 
-const archivePath = resolve(process.cwd(), 'dist/$__plugins_linonetwo_memeloop-agent-ui.json');
+const archivePath = resolve(process.cwd(), 'dist/$__plugins_linonetwo_tidgi-language-model.json');
 const nodeRequire = createRequire(import.meta.url);
 const dom = new JSDOM('<!doctype html><html><body></body></html>');
 const archive = JSON.parse(readFileSync(archivePath, 'utf8'));
 const tiddlers = JSON.parse(archive.text).tiddlers;
-const components = tiddlers['$:/plugins/linonetwo/memeloop-agent-ui/components.js']?.text;
+const components = tiddlers['$:/plugins/linonetwo/tidgi-language-model/components.js']?.text;
 
 if (typeof components !== 'string') {
-  throw new Error('components.js was not emitted into the MemeLoop Agent UI plugin archive');
+  throw new Error('components.js was not emitted into the TidGi Language Model plugin archive');
 }
 if (!/require\((['"])react\1\)/u.test(components)) {
   throw new Error('components.js must keep React as an external require');

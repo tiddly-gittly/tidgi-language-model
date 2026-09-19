@@ -1,4 +1,4 @@
-title: $:/plugins/linonetwo/memeloop-agent-ui/sidebar-tab
+title: $:/plugins/linonetwo/tidgi-language-model/SidebarTab
 caption: {{$:/core/images/chat-bubble}} MemeLoop
 tags: $:/tags/SideBar
 list-after: $:/core/ui/SideBar/Recent

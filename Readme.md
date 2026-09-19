@@ -1,6 +1,6 @@
-# MemeLoop Agent UI for TiddlyWiki
+# TidGi Language Model for TiddlyWiki
 
-`$:/plugins/linonetwo/memeloop-agent-ui` brings the shared MemeLoop React chat
+`$:/plugins/linonetwo/tidgi-language-model` brings the shared MemeLoop React chat
 surface to TiddlyWiki and TidGi Desktop through `tw-react`.
 
 It provides a full chat view, a responsive sidebar tab, agent/model selectors,
