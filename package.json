@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "tiddlywiki-plugin-dev dev",
     "dev:wiki": "tiddlywiki-plugin-dev dev --write-wiki",
-    "test": "tiddlywiki-plugin-dev test",
+    "test": "vitest run",
+    "test:tw": "tiddlywiki-plugin-dev test",
     "build": "npm run clean && tiddlywiki-plugin-dev build && npm run check:artifact",
     "publish": "npm run clean && tiddlywiki-plugin-dev publish",
     "reset": "rimraf ./**/node_modules",
