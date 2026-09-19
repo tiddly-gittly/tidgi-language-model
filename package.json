@@ -4,7 +4,7 @@
   "description": "Responsive MemeLoop Agent chat UI for TiddlyWiki and TidGi Desktop",
   "url": "https://tiddly-gittly.github.io/Modern.TiddlyDev/",
   "license": "MIT",
-  "version": "0.1.0",
+  "version": "0.4.0",
   "scripts": {
     "dev": "tiddlywiki-plugin-dev dev",
     "dev:wiki": "tiddlywiki-plugin-dev dev --write-wiki",
