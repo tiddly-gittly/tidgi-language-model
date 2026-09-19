@@ -7,6 +7,7 @@
   "plugin-type": "plugin",
   "stability": "STABILITY_2_STABLE",
   "version": "0.1.0",
+  "Modern.TiddlyDev#ExternalModules": "react react-dom react/jsx-runtime react-dom/client",
   "dependents": [
     "$:/plugins/linonetwo/tw-react"
   ],

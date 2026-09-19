@@ -1,5 +1,6 @@
 {
   "name": "memeloop-agent-ui",
+  "private": true,
   "description": "Responsive MemeLoop Agent chat UI for TiddlyWiki and TidGi Desktop",
   "url": "https://tiddly-gittly.github.io/Modern.TiddlyDev/",
   "license": "MIT",
@@ -8,7 +9,7 @@
     "dev": "tiddlywiki-plugin-dev dev",
     "dev:wiki": "tiddlywiki-plugin-dev dev --write-wiki",
     "test": "tiddlywiki-plugin-dev test",
-    "build": "npm run clean && tiddlywiki-plugin-dev build",
+    "build": "npm run clean && tiddlywiki-plugin-dev build && npm run check:artifact",
     "publish": "npm run clean && tiddlywiki-plugin-dev publish",
     "reset": "rimraf ./**/node_modules",
     "clean": "rimraf dist",
@@ -25,7 +26,8 @@
     "test:unit:watch": "vitest",
     "lint": "eslint ./src --ext js,ts,tsx,json",
     "lint:fix": "eslint ./src --ext ts,tsx,json --fix",
-    "check": "tsc --noEmit --skipLibCheck"
+    "check": "tsc --noEmit --skipLibCheck",
+    "check:artifact": "node scripts/check-components-artifact.mjs"
   },
   "engines": {
     "node": ">=20"

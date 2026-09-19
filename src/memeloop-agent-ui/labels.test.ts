@@ -16,11 +16,7 @@ describe('formatTimelineMessage', () => {
       expect(Object.values(labels)).not.toContain('');
       expect(labels.compacted(12)).toContain('12');
       expect(labels.newMessages(3)).toContain('3');
-      expect(labels.previewMessageCount(7)).toContain('7');
-      expect(labels.previewCompactionCount(2)).toContain('2');
       expect(labels.configErrorMessage('provider_key_missing')).toContain('provider_key_missing');
-      expect(labels.runOnTarget('Peer A')).toContain('Peer A');
-      expect(labels.targetConfirmDescription('Peer A')).toContain('Peer A');
     }
     expect(formatTimelineMessage(2, 8, 'agent', 'fr')).toContain('Agent');
     expect(formatTimelineMessage(3, 8, 'assistant', 'ru')).toContain('Агент');

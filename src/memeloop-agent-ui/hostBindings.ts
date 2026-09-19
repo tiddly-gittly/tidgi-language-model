@@ -8,10 +8,14 @@ const DESKTOP_ATTACHMENT_CHUNK_BYTES = 256 * 1024;
 const DESKTOP_ATTACHMENT_TOTAL_BYTES = 64 * 1024 * 1024;
 
 export function createSecureBrowserUuid(): string {
-  const cryptoProvider = Reflect.get(globalThis, 'crypto') as Crypto | undefined;
-  if (cryptoProvider?.randomUUID) return cryptoProvider.randomUUID();
+  const cryptoProvider = typeof globalThis.crypto === 'object' ? globalThis.crypto : undefined;
+  if (typeof cryptoProvider?.randomUUID === 'function') return cryptoProvider.randomUUID();
+  if (typeof cryptoProvider?.getRandomValues !== 'function') {
+    throw new Error('secure_random_unavailable');
+  }
   const values = new Uint32Array(4);
-  cryptoProvider?.getRandomValues(values);
+  cryptoProvider.getRandomValues(values);
+  if (values.every(value => value === 0)) throw new Error('secure_random_unavailable');
   return Array.from(values, value => value.toString(16).padStart(8, '0')).join('-');
 }
 
@@ -134,7 +138,7 @@ export function createWikiAgentConversationClient(): AgentConversationClient {
       const observable = getWikiAgentObservables()?.agentInstance;
       if (!observable) throw new Error('wiki_agent_observables_unavailable');
       const subscription = observable.subscribeToConversationUpdates(conversationId).subscribe(update => {
-        listener(update as never);
+        listener(update);
       });
       return () => {
         subscription.unsubscribe();
@@ -144,13 +148,13 @@ export function createWikiAgentConversationClient(): AgentConversationClient {
       options?.signal?.throwIfAborted();
       const response = await requireAgentInstance().deleteConversationTurn(request);
       options?.signal?.throwIfAborted();
-      return response as never;
+      return response;
     },
     async retryTurn(request, options) {
       options?.signal?.throwIfAborted();
       const response = await requireAgentInstance().retryConversationTurn(request);
       options?.signal?.throwIfAborted();
-      return response as never;
+      return response;
     },
   };
 }
@@ -237,9 +241,8 @@ function requireAgentInstance() {
 }
 
 function unwrap<T>(result: WikiAgentHostResult<T>): T {
-  if (result.kind === 'success' && result.value !== undefined) return result.value;
-  if (result.error) throw new AgentRunFailure(result.error);
-  throw new Error('wiki_agent_host_operation_failed');
+  if (result.kind === 'success') return result.value;
+  throw new AgentRunFailure(result.error);
 }
 
 async function waitForRun(runId: string, signal?: AbortSignal): Promise<void> {
