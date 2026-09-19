@@ -1,6 +1,7 @@
 title: $:/plugins/linonetwo/tidgi-language-model/SidebarTab
-type: text/vnd.tiddlywiki
+caption: {{$:/core/images/chat-bubble}} MemeLoop
 tags: $:/tags/SideBar
-caption: <<lingo Name $:/plugins/linonetwo/tidgi-language-model/language/>>
+list-after: $:/core/ui/SideBar/Recent
+type: text/vnd.tiddlywiki
 
-<$tidgi-chat history="$:/state/plugins/linonetwo/tidgi-language-model/side-bar-history" scroll="yes" temperature="0.5" />
+<$memeloopAgentChat mode="sidebar" />

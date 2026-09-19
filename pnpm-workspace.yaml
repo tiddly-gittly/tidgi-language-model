@@ -1,9 +1,22 @@
 packages:
   - '.'
 
+overrides:
+  '@assistant-ui/core': 0.3.17
+
+allowBuilds:
+  '@parcel/watcher': true
+  dprint: true
+  esbuild: true
+  svelte-preprocess: true
+  unrs-resolver: true
+
 onlyBuiltDependencies:
   - '@parcel/watcher'
   - dprint
   - esbuild
   - svelte-preprocess
 
+minimumReleaseAgeExclude:
+  - '@memeloop/react-ui@0.2.4'
+  - memeloop@0.3.4

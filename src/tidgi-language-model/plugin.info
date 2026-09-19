@@ -1,10 +1,15 @@
 {
   "title": "$:/plugins/linonetwo/tidgi-language-model",
-  "name": "TG AI",
+  "name": "TidGi Language Model",
+  "description": "Responsive MemeLoop Agent chat workspace for TiddlyWiki and TidGi Desktop",
   "author": "LinOnetwo",
-  "description": "Chat with TidGi's build-in language model service (LLama/Rwkv) in Tiddlywiki. A private, local and rooted ChatGPT AI.",
+  "core-version": ">=5.3.0",
   "plugin-type": "plugin",
-  "dependents": [],
-  "version": "0.3.1",
-  "list": "readme config tree"
+  "stability": "STABILITY_2_STABLE",
+  "version": "0.4.0",
+  "Modern.TiddlyDev#ExternalModules": "react react-dom react/jsx-runtime react-dom/client",
+  "dependents": [
+    "$:/plugins/linonetwo/tw-react"
+  ],
+  "list": "readme SidebarTab"
 }

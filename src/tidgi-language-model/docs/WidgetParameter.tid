@@ -1,5 +1,0 @@
-title: $:/plugins/linonetwo/tidgi-language-model/WidgetParameter
-
-\define lingo-base() $:/plugins/linonetwo/tidgi-language-model/language/
-
-<<lingo WidgetParameter>>
