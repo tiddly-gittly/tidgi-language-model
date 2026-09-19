@@ -17,4 +17,13 @@ export default [
       },
     },
   },
+  {
+    files: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
+    rules: {
+      '@typescript-eslint/no-unnecessary-condition': 'off',
+      '@typescript-eslint/require-await': 'off',
+      '@typescript-eslint/unbound-method': 'off',
+      'unicorn/prevent-abbreviations': 'off',
+    },
+  },
 ];

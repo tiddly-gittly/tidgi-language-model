@@ -1,6 +1,0 @@
-title: $:/plugins/linonetwo/tidgi-language-model/SidebarTab
-type: text/vnd.tiddlywiki
-tags: $:/tags/SideBar
-caption: <<lingo Name $:/plugins/linonetwo/tidgi-language-model/language/>>
-
-<$tidgi-chat history="$:/state/plugins/linonetwo/tidgi-language-model/side-bar-history" scroll="yes" temperature="0.5" />

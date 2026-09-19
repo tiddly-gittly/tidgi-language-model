@@ -1,7 +1,0 @@
-title: $:/plugins/linonetwo/tidgi-language-model/language/zh-Hans/DefaultPromptTemplate
-
-<<userInputText>>
-
-<% if [<attachment>] %>
-<<attachment>>
-<% endif %>
